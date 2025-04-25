@@ -10,3 +10,12 @@ li.pair {
 li.odd {
   text-transform: uppercase;
 }
+
+h1, h2, h3 {
+  color: red;
+}
+
+.change-size {
+  font-size: 40px;
+  border: 1px black solid;
+}
