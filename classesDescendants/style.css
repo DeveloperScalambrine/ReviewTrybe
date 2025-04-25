@@ -1,6 +1,8 @@
 ol li {
   background-color: yellow;
   list-style: none;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 li.pair {
@@ -19,3 +21,4 @@ h1, h2, h3 {
   font-size: 40px;
   border: 1px black solid;
 }
+
