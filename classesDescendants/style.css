@@ -1,0 +1,12 @@
+ol li {
+  background-color: yellow;
+  list-style: none;
+}
+
+li.pair {
+  color: green;
+}
+
+li.odd {
+  text-transform: uppercase;
+}
