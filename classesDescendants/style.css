@@ -22,3 +22,41 @@ h1, h2, h3 {
   border: 1px black solid;
 }
 
+ul li:nth-child(1) {
+  color: blue;
+}
+
+ul li:nth-child(2) {
+  color: blue;
+}
+
+ul li:nth-child(3) {
+  color: blue;
+}
+
+.languages li:nth-child(2) {
+  background-color: pink;
+}
+
+a  {
+  text-decoration: none;
+}
+
+#developer li a:hover {
+  font-weight: 700;
+}
+#developer li a[href*="stackoverflow"]:hover {
+  color: orange;
+}
+#developer li a[href*="w3schools"]:hover {
+  color: green;
+}
+#developer li a[href*="mozilla"]:hover {
+  color: black;
+}
+#developer li a[href*="devdocs"]:hover {
+  color: yellow;
+}
+#developer li a[href*="trybe"]:hover {
+  color: green;
+}
