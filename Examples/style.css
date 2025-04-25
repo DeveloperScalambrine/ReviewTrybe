@@ -1,0 +1,26 @@
+h1, p {
+    text-align: center;
+}
+
+ol, ul {
+    padding: 3px;
+    margin-left: 510px;
+    text-align: center; 
+}
+
+ul:hover, ol:hover {
+    background-color: aqua;
+}
+
+li:active {
+    font-family: sans-serif;
+    font-size: 20px;
+}
+
+ol, ul {
+    width: 300px;
+}
+
+li {
+    list-style: none;
+}
