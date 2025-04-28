@@ -28,6 +28,39 @@ const concatName = (arr) => {
     }
 }
 
-console.log(concatName(['Carlos', 'Henrique']));
+const highestCount = (arr) => {
+    if (arr.length === 0) {
+        return "Array is empty"
+    }
+    const highest = Math.max(...arr)
+    const count = arr.filter(num => num === highest).length
+
+    return {
+        highestNumber: highest,
+        frequency: count
+    }
+}
+
+const catAndMouse = (cat1, cat2, mouse) => {
+  // let positionCat1 = Math.abs(cat1 - mouse);
+  // let positionCat2 = Math.abs(cat2 - mouse);
+
+  // if (positionCat1 < positionCat2) {
+  //   return 'cat1';
+  // }
+
+  // if (positionCat2 < positionCat1) {
+  //   return 'cat2';
+  // }
+  // return 'os gatos trombam e o rato foge.';
+  cat1 -= mouse;
+  cat2 -= mouse;
+  if (Math.abs(cat1) === Math.abs(cat2)) {
+    return 'Os gatos trombam e o rato foge';
+  }
+
+  return Math.abs(cat1) < Math.abs(cat2) ? 'cat1' : 'cat2';
+}
+
 
     
