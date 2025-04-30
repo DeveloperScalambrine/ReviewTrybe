@@ -63,7 +63,42 @@
       tagMain.className = 'main-content'
       document.body.appendChild(announcement)
       document.body.appendChild(tagMain)
+      let tagSection = document.createElement('section')
+      tagSection.className = 'center-content'
+      tagMain.appendChild(tagSection)
+      let tagP = document.createElement('p')
+      tagP.innerText = 'Venha conhecer nossa Agencia'
+      tagSection.appendChild(tagP)
+      let tagSectionLeft = document.createElement('section')
+      tagSectionLeft.className = 'left-content'
+      tagMain.appendChild(tagSectionLeft)
+      let tagSectionRight = document.createElement('section')
+      tagSectionRight.className = 'right-content'
+      tagMain.appendChild(tagSectionRight)
+      let img = document.createElement('img')
+      img.src = 'https://picsum.photos/200'
+      img.className = 'small-image'
+      tagSectionLeft.appendChild(img)
+      const numbers = [
+        'um', 'dois', 'tres', 'quatro', 'cinco', 
+        'seis', 'sete', 'oito', 'nove', 'dez'];
+        
+        const ul = document.createElement('ul');
+    numbers.forEach((word, index) => {
+        ul.innerHTML += `<li>${index + 1}: ${word}</li>`;
+    });  
+    tagSectionRight.appendChild(ul)
+   
+    const headings = ['First Heading', 'Second Heading', 'Third Heading'];
+    
+    // Create h3 tags using forEach
+    headings.forEach(headingText => {
+        const h3 = document.createElement('h3');
+        h3.textContent = headingText;
+        tagMain.appendChild(h3);
+    });
 
+    
     </script>
   </body>
 </html>
