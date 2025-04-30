@@ -113,8 +113,13 @@
 //   });
 //   container.appendChild(footer);
 
-const element = document.getElementsByTagName('body').parentNode
-console.log(element);
+let parentItem = document.getElementById('parent')
+
+let elementLi = document.createElement('li')
+
+elementLi.innerHTML = "Create for DOM"
+
+elementLi.appendChild(parentItem)
 
 
 
