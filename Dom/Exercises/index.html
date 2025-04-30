@@ -59,8 +59,11 @@
     <script>
       let announcement = document.createElement('h1')
       announcement.innerText = 'TrybeTrip - Agência de Viagens'
-      let body = document.getElementsByTagName('body')[0]
-      body.appendChild(announcement)
+      let tagMain = document.createElement('main') 
+      tagMain.className = 'main-content'
+      document.body.appendChild(announcement)
+      document.body.appendChild(tagMain)
+
     </script>
   </body>
 </html>
