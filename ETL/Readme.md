@@ -20,4 +20,28 @@ O principal objetivo é aplicar conceitos de engenharia e análise de dados para
   - Cálculo de métricas como aproveitamento, saldo de gols, pontos por rodada, etc.
 
 - **📥 Carga:** 
-  - Armazenamento
+  - Armazenamento dos dados tratados em DataFrames e exportação para arquivos `.csv` ou visualizações.
+
+---
+
+## 📊 Ferramentas Utilizadas
+
+- Python
+- Pandas
+- Jupyter Notebook
+- Matplotlib / Seaborn
+- Requests / BeautifulSoup (se scraping foi usado)
+
+---
+
+## 🔍 Insights Gerados
+
+- Ranking por desempenho geral
+- Comparativo entre desempenho em casa vs fora
+- Evolução da pontuação por rodada
+- Análise de tendências de vitória/empate/derrota
+
+---
+
+## 📁 Estrutura do Projeto
+
