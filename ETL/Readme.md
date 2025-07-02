@@ -13,7 +13,8 @@ O principal objetivo é aplicar conceitos de engenharia e análise de dados para
 ## ⚙️ Metodologia (ETL)
 
 - **🗃️ Extração:** 
-  - Coleta dos dados da tabela oficial do Brasileirão 2024 (via scraping, API ou CSV).
+  - Conversão automatizada de um arquivo PDF contendo a tabela do Brasileirão 2024 para o formato Excel (`.xlsx`) utilizando `pdfplumber` e `pandas`.
+  - Coleta dos dados da tabela oficial (caso necessário, via scraping, API ou CSV adicional).
 
 - **🔄 Transformação:** 
   - Limpeza e padronização dos dados (tratamento de nulos, conversões de tipos, normalização de nomes de times).
