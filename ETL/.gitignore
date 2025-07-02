@@ -1,0 +1,5 @@
+# Ignorar configurações do VS Code
+.vscode/
+
+# Ignorar ambiente virtual Python
+.venv/
