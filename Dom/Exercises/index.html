@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Exercício</title>
+    <style>
+      section {
+        border-color: black;
+        border-style: solid;
+      }
+
+      .title {
+        text-align: center;
+      }
+
+      .main-content {
+        background-color: yellow;
+      }
+
+      .main-content .center-content {
+        background-color: red;
+        width: 50%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .main-content .center-content p {
+        font-style: italic;
+      }
+
+      .main-content .left-content {
+        background-color: green;
+        width: 60%;
+        margin-left: 0;
+        margin-right: auto;
+      }
+
+      .main-content .left-content .small-image {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        border-radius: 100%;
+      }
+
+      .main-content .right-content {
+        background-color: blue;
+        width: 60%;
+        margin-left: auto;
+        margin-right: 0;
+      }
+
+      .main-content .description {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      let announcement = document.createElement('h1')
+      announcement.innerText = 'TrybeTrip - Agência de Viagens'
+      let tagMain = document.createElement('main') 
+      tagMain.className = 'main-content'
+      document.body.appendChild(announcement)
+      document.body.appendChild(tagMain)
+      let tagSection = document.createElement('section')
+      tagSection.className = 'center-content'
+      tagMain.appendChild(tagSection)
+      let tagP = document.createElement('p')
+      tagP.innerText = 'Venha conhecer nossa Agencia'
+      tagSection.appendChild(tagP)
+      let tagSectionLeft = document.createElement('section')
+      tagSectionLeft.className = 'left-content'
+      tagMain.appendChild(tagSectionLeft)
+      let tagSectionRight = document.createElement('section')
+      tagSectionRight.className = 'right-content'
+      tagMain.appendChild(tagSectionRight)
+      let img = document.createElement('img')
+      img.src = 'https://picsum.photos/200'
+      img.className = 'small-image'
+      tagSectionLeft.appendChild(img)
+      const numbers = [
+        'um', 'dois', 'tres', 'quatro', 'cinco', 
+        'seis', 'sete', 'oito', 'nove', 'dez'];
+        
+        const ul = document.createElement('ul');
+    numbers.forEach((word, index) => {
+        ul.innerHTML += `<li>${index + 1}: ${word}</li>`;
+    });  
+    tagSectionRight.appendChild(ul)
+   
+    const headings = ['First Heading', 'Second Heading', 'Third Heading'];
+    
+    // Create h3 tags using forEach
+    headings.forEach(headingText => {
+        const h3 = document.createElement('h3');
+        h3.textContent = headingText;
+        tagMain.appendChild(h3);
+    });
+
+    
+    </script>
+  </body>
+</html>

@@ -1,0 +1,132 @@
+body {
+  font-family: sans-serif;
+  text-align: center;
+  padding: 20px;
+}
+
+#calendar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.mes {
+  border: 1px solid #ccc;
+  padding: 10px;
+  width: 280px;
+  border-radius: 10px;
+  background: #f9f9f9;
+}
+
+.mes h2 {
+  margin-top: 0;
+  font-size: 18px;
+  background-color: #ddd;
+  padding: 5px 0;
+  border-radius: 5px;
+}
+
+.dias {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.dia-semana {
+  font-weight: bold;
+  background-color: #eee;
+  padding: 5px 0;
+  border-radius: 5px;
+}
+
+.dia, .dia-semana {
+  text-align: center;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  min-height: 30px;
+}
+
+.vazio {
+  background: transparent;
+  border: none;
+}
+
+.feriado {
+  background-color: #ffdddd;
+  border: 2px solid red;
+}
+
+.compromisso {
+  background-color: #ddf;
+  border: 2px solid blue;
+}
+
+.tarefa {
+  background-color: #dfd;
+  border: 2px solid green;
+}
+
+/* Modal */
+
+  /* Fundo do modal */
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    animation: fadeIn 0.3s ease;
+  }
+
+  /* Conteúdo interno do modal */
+  .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    animation: slideIn 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Botões */
+  .botoes {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .botoes button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .botoes button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+  }
+
+  .botoes button[type="button"] {
+    background-color: #f44336;
+    color: white;
+  }
+
+  /* Animações */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideIn {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
