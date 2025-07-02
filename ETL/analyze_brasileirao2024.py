@@ -26,4 +26,14 @@ df.at[0, 'DIA']  = 'sab'
 # Preenche DATA e DIA apenas dentro de cada grupo de ROD
 df[['DATA', 'DIA']] = df.groupby('ROD')[['DATA', 'DIA']].ffill()
 
-print(df.head(10))
+df['JOGO'] = df['JOGO'].astype(str)
+df[['TimeMandante', 'UF_M', 'Gols_M', 'Gols_V', 'TimeVisitante', 'UF_V']] = df['JOGO'].str.extract(
+    r'^(.*?)\s+([A-Z]{2})\s+(\d+)\s+x\s+(\d+)\s+(.*?)\s+([A-Z]{2})$'
+)
+
+
+df['GolMandante'] = df['TimeMandante'].str.strip() + ' ' + df['UF_M'] + ' - ' + df['Gols_M']
+df['GolVisitante'] = df['TimeVisitante'].str.strip() + ' ' + df['UF_V'] + ' - ' + df['Gols_V']
+
+# Visualiza resultado
+print(df[['ROD', 'CIDADE', 'JOGO', 'GolMandante', 'GolVisitante']].head(30))
