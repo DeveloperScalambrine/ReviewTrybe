@@ -31,9 +31,23 @@ df[['TimeMandante', 'UF_M', 'Gols_M', 'Gols_V', 'TimeVisitante', 'UF_V']] = df['
     r'^(.*?)\s+([A-Z]{2})\s+(\d+)\s+x\s+(\d+)\s+(.*?)\s+([A-Z]{2})$'
 )
 
-
 df['GolMandante'] = df['TimeMandante'].str.strip() + ' ' + df['UF_M'] + ' - ' + df['Gols_M']
 df['GolVisitante'] = df['TimeVisitante'].str.strip() + ' ' + df['UF_V'] + ' - ' + df['Gols_V']
 
-# Visualiza resultado
-print(df[['ROD', 'CIDADE', 'JOGO', 'GolMandante', 'GolVisitante']].head(30))
+    #  Pequena analise filtrando por equipe e rodada
+# df_filter_2rod = df[df['ROD'].isin(['1ª', '2ª', '3ª'])]
+df['ROD_NUM'] = df['ROD'].str.extract(r'(\d+)').astype(int)
+
+# Filtra do início até a segunda rodada
+df_filter_2rod = df[df['ROD_NUM'] <= 10]
+
+principal = df_filter_2rod[df_filter_2rod['GolMandante'].str.contains(r'^São Paulo SP', regex=True)]
+
+visitor = df_filter_2rod[df_filter_2rod['GolVisitante'].str.contains(r'^São Paulo SP', regex=True)]
+
+gols_principal = principal['GolMandante'].str.extract(r' - (\d+)$').astype(int).sum().values[0]
+gols_visitor = visitor['GolVisitante'].str.extract(r' - (\d+)$').astype(int).sum().values[0]
+
+total_gols_sp = gols_principal + gols_visitor
+
+print(f"Gols marcados por São Paulo SP na primeira e segunda rodada: {total_gols_sp}")
