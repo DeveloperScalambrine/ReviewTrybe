@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
 
 # Caminho para o arquivo Excel
 path_excel = 'File/Brasileiro_2024.xlsx'
@@ -62,8 +63,8 @@ if 'ROD_NUM' not in df.columns:
     df['ROD_NUM'] = df['ROD'].str.extract(r'(\d+)').astype(int)
 
 # Filtra jogos com São Paulo SP como mandante ou visitante
-sp_mandante = df[df['GolMandante'].str.contains(r'^São Paulo SP', regex=True)].copy()
-sp_visitante = df[df['GolVisitante'].str.contains(r'^São Paulo SP', regex=True)].copy()
+sp_mandante = df_filter_2rod[df_filter_2rod['GolMandante'].str.contains(r'^São Paulo SP', regex=True)].copy()
+sp_visitante = df_filter_2rod[df_filter_2rod['GolVisitante'].str.contains(r'^São Paulo SP', regex=True)].copy()
 
 # Extrai gols e rodada
 sp_mandante['GOLS'] = sp_mandante['GolMandante'].str.extract(r' - (\d+)$').astype(int)
@@ -93,7 +94,7 @@ bars[gols_por_rodada.index.get_loc(rodada_max)].set_color('green')
 bars[gols_por_rodada.index.get_loc(rodada_min)].set_color('red')
 
 # Rótulos
-plt.title('Gols do São Paulo SP por Rodada')
+plt.title('Gols do São Paulo SP até a decima Rodada')
 plt.xlabel('Rodada')
 plt.ylabel('Gols Marcados')
 plt.xticks(gols_por_rodada.index)
@@ -102,6 +103,8 @@ plt.xticks(gols_por_rodada.index)
 plt.text(rodada_max, gols_por_rodada[rodada_max] + 0.2, f'Máx: {gols_por_rodada[rodada_max]}', ha='center', color='green')
 plt.text(rodada_min, gols_por_rodada[rodada_min] + 0.2, f'Mín: {gols_por_rodada[rodada_min]}', ha='center', color='red')
 
+os.makedirs('img', exist_ok=True)
+
 plt.tight_layout()
-plt.savefig('grafico_sao_paulo_sp.png', dpi=300)
+plt.savefig('img/grafico_sao_paulo_sp.png', dpi=300)
 print("✅ Gráfico salvo como 'grafico_sao_paulo_sp.png'")
