@@ -26,8 +26,8 @@ plt.xticks(rotation=45)
 plt.tight_layout()
 
 # Salva o gráfico
-plt.savefig("img/top5_pontos_classificacao.png", dpi=300)
-print("✅ Gráfico salvo em 'graphs/top5_pontos_classificacao.png'")
+# plt.savefig("img/top5_pontos_classificacao.png", dpi=300)
+# print("✅ Gráfico salvo em 'graphs/top5_pontos_classificacao.png'")
 
 #     # Gerando Grafico
 
@@ -80,3 +80,57 @@ print("✅ Gráfico salvo em 'graphs/top5_pontos_classificacao.png'")
 # # plt.tight_layout()
 # # plt.savefig('img/grafico_sao_paulo_sp.png', dpi=300)
 # # print("✅ Gráfico salvo como 'grafico_sao_paulo_sp.png'")
+
+
+def better_team(df, limite_rodada=14, top_n=5):
+    # Converte coluna de rodada para número
+    df['ROD_NUM'] = df['ROD'].str.extract(r'(\d+)').astype(int)
+    
+    # Filtra até a rodada definida
+    df = df[df['ROD_NUM'] <= limite_rodada].copy()
+
+    # Garante tipos inteiros
+    df['Gols_M'] = df['Gols_M'].astype(int)
+    df['Gols_V'] = df['Gols_V'].astype(int)
+
+    # Pontuação por jogo para mandante
+    df['Pontos_M'] = df.apply(lambda x: 3 if x['Gols_M'] > x['Gols_V'] else (1 if x['Gols_M'] == x['Gols_V'] else 0), axis=1)
+
+    # Pontuação por jogo para visitante
+    df['Pontos_V'] = df.apply(lambda x: 3 if x['Gols_V'] > x['Gols_M'] else (1 if x['Gols_V'] == x['Gols_M'] else 0), axis=1)
+
+    # Nome formatado dos times
+    df['Time_M'] = df['TimeMandante'].str.strip() + ' ' + df['UF_M']
+    df['Time_V'] = df['TimeVisitante'].str.strip() + ' ' + df['UF_V']
+
+    # Mandantes
+    mandantes = df.groupby('Time_M').agg(
+        PontosMandante=('Pontos_M', 'sum'),
+        GolsMandante=('Gols_M', 'sum')
+    ).reset_index().rename(columns={'Time_M': 'Time'})
+
+    # Visitantes
+    visitantes = df.groupby('Time_V').agg(
+        PontosVisitante=('Pontos_V', 'sum'),
+        GolsVisitante=('Gols_V', 'sum'),
+        PartidasVisitante=('Time_V', 'count')
+    ).reset_index().rename(columns={'Time_V': 'Time'})
+
+    # Merge e preenchimento de valores ausentes
+    tabela = pd.merge(mandantes, visitantes, on='Time', how='outer').fillna(0)
+
+    # Conversão para inteiros
+    cols_int = ['PontosMandante', 'GolsMandante', 'PontosVisitante', 'GolsVisitante', 'PartidasVisitante']
+    for col in cols_int:
+        tabela[col] = tabela[col].astype(int)
+
+    # Totalizadores
+    tabela['TotalPontos'] = tabela['PontosMandante'] + tabela['PontosVisitante']
+    tabela['TotalGols'] = tabela['GolsMandante'] + tabela['GolsVisitante']
+
+    # Ordenar pelo total de pontos
+    tabela_final = tabela[['Time', 'TotalPontos', 'TotalGols', 'PartidasVisitante']] \
+        .sort_values(by='TotalPontos', ascending=False) \
+        .head(top_n)
+
+    return tabela_final
