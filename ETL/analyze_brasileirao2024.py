@@ -53,6 +53,6 @@ gols_principal = principal['GolMandante'].str.extract(r' - (\d+)$').astype(int).
 gols_visitor = visitor['GolVisitante'].str.extract(r' - (\d+)$').astype(int).sum().values[0]
 
 total_gols_sp = gols_principal + gols_visitor
-df.to_excel('File/Brasileiro_2024_limpo.xlsx', index=False)
-print("📁 Arquivo salvo como 'File/Brasileiro_2024_limpo.xlsx'")
+# df.to_excel('File/Brasileiro_2024_limpo.xlsx', index=False)
+# print("📁 Arquivo salvo como 'File/Brasileiro_2024_limpo.xlsx'")
 
