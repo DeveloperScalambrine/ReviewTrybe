@@ -59,52 +59,53 @@ print(df.columns.tolist())
 
 
     # Gerando Grafico
-if 'ROD_NUM' not in df.columns:
-    df['ROD_NUM'] = df['ROD'].str.extract(r'(\d+)').astype(int)
 
-# Filtra jogos com São Paulo SP como mandante ou visitante
-sp_mandante = df_filter_2rod[df_filter_2rod['GolMandante'].str.contains(r'^São Paulo SP', regex=True)].copy()
-sp_visitante = df_filter_2rod[df_filter_2rod['GolVisitante'].str.contains(r'^São Paulo SP', regex=True)].copy()
+# if 'ROD_NUM' not in df.columns:
+#     df['ROD_NUM'] = df['ROD'].str.extract(r'(\d+)').astype(int)
 
-# Extrai gols e rodada
-sp_mandante['GOLS'] = sp_mandante['GolMandante'].str.extract(r' - (\d+)$').astype(int)
-sp_mandante['TIME'] = 'São Paulo SP'
-sp_mandante['TIPO'] = 'Mandante'
+# # Filtra jogos com São Paulo SP como mandante ou visitante
+# sp_mandante = df_filter_2rod[df_filter_2rod['GolMandante'].str.contains(r'^São Paulo SP', regex=True)].copy()
+# sp_visitante = df_filter_2rod[df_filter_2rod['GolVisitante'].str.contains(r'^São Paulo SP', regex=True)].copy()
 
-sp_visitante['GOLS'] = sp_visitante['GolVisitante'].str.extract(r' - (\d+)$').astype(int)
-sp_visitante['TIME'] = 'São Paulo SP'
-sp_visitante['TIPO'] = 'Visitante'
+# # Extrai gols e rodada
+# sp_mandante['GOLS'] = sp_mandante['GolMandante'].str.extract(r' - (\d+)$').astype(int)
+# sp_mandante['TIME'] = 'São Paulo SP'
+# sp_mandante['TIPO'] = 'Mandante'
 
-# Junta os dois dataframes
-sp_total = pd.concat([sp_mandante, sp_visitante])
+# sp_visitante['GOLS'] = sp_visitante['GolVisitante'].str.extract(r' - (\d+)$').astype(int)
+# sp_visitante['TIME'] = 'São Paulo SP'
+# sp_visitante['TIPO'] = 'Visitante'
 
-# Agrupa por rodada e soma os gols
-gols_por_rodada = sp_total.groupby('ROD_NUM')['GOLS'].sum()
+# # Junta os dois dataframes
+# sp_total = pd.concat([sp_mandante, sp_visitante])
 
-# Identifica a rodada com mais e menos gols
-rodada_max = gols_por_rodada.idxmax()
-rodada_min = gols_por_rodada.idxmin()
+# # Agrupa por rodada e soma os gols
+# gols_por_rodada = sp_total.groupby('ROD_NUM')['GOLS'].sum()
 
-# --- 📊 Gráfico ---
-plt.figure(figsize=(10, 6))
-bars = plt.bar(gols_por_rodada.index, gols_por_rodada.values, color='skyblue')
+# # Identifica a rodada com mais e menos gols
+# rodada_max = gols_por_rodada.idxmax()
+# rodada_min = gols_por_rodada.idxmin()
 
-# Destaca as rodadas com mais e menos gols
-bars[gols_por_rodada.index.get_loc(rodada_max)].set_color('green')
-bars[gols_por_rodada.index.get_loc(rodada_min)].set_color('red')
+# # --- 📊 Gráfico ---
+# plt.figure(figsize=(10, 6))
+# bars = plt.bar(gols_por_rodada.index, gols_por_rodada.values, color='skyblue')
 
-# Rótulos
-plt.title('Gols do São Paulo SP até a decima Rodada')
-plt.xlabel('Rodada')
-plt.ylabel('Gols Marcados')
-plt.xticks(gols_por_rodada.index)
+# # Destaca as rodadas com mais e menos gols
+# bars[gols_por_rodada.index.get_loc(rodada_max)].set_color('green')
+# bars[gols_por_rodada.index.get_loc(rodada_min)].set_color('red')
 
-# Anotações
-plt.text(rodada_max, gols_por_rodada[rodada_max] + 0.2, f'Máx: {gols_por_rodada[rodada_max]}', ha='center', color='green')
-plt.text(rodada_min, gols_por_rodada[rodada_min] + 0.2, f'Mín: {gols_por_rodada[rodada_min]}', ha='center', color='red')
+# # Rótulos
+# plt.title('Gols do São Paulo SP até a decima Rodada')
+# plt.xlabel('Rodada')
+# plt.ylabel('Gols Marcados')
+# plt.xticks(gols_por_rodada.index)
 
-os.makedirs('img', exist_ok=True)
+# # Anotações
+# plt.text(rodada_max, gols_por_rodada[rodada_max] + 0.2, f'Máx: {gols_por_rodada[rodada_max]}', ha='center', color='green')
+# plt.text(rodada_min, gols_por_rodada[rodada_min] + 0.2, f'Mín: {gols_por_rodada[rodada_min]}', ha='center', color='red')
 
-plt.tight_layout()
-plt.savefig('img/grafico_sao_paulo_sp.png', dpi=300)
-print("✅ Gráfico salvo como 'grafico_sao_paulo_sp.png'")
+# os.makedirs('img', exist_ok=True)
+
+# plt.tight_layout()
+# plt.savefig('img/grafico_sao_paulo_sp.png', dpi=300)
+# print("✅ Gráfico salvo como 'grafico_sao_paulo_sp.png'")
