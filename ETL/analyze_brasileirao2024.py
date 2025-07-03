@@ -34,8 +34,9 @@ df[['TimeMandante', 'UF_M', 'Gols_M', 'Gols_V', 'TimeVisitante', 'UF_V']] = df['
 )
 
 # Remove linhas mal formatadas
-df = df.dropna(subset=['TimeMandante', 'UF_M', 'Gols_M', 'Gols_V', 'TimeVisitante', 'UF_V'])
-
+# df = df.dropna(subset=['TimeMandante', 'UF_M', 'Gols_M', 'Gols_V', 'TimeVisitante', 'UF_V'])
+mask_invalid = df[['TimeMandante', 'UF_M', 'Gols_M', 'Gols_V', 'TimeVisitante', 'UF_V']].isnull().any(axis=1)
+df_error_extract = df[mask_invalid]
 
 df['GolMandante'] = df['TimeMandante'].str.strip() + ' ' + df['UF_M'] + ' - ' + df['Gols_M']
 df['GolVisitante'] = df['TimeVisitante'].str.strip() + ' ' + df['UF_V'] + ' - ' + df['Gols_V']
@@ -55,8 +56,10 @@ gols_principal = principal['GolMandante'].str.extract(r' - (\d+)$').astype(int).
 gols_visitor = visitor['GolVisitante'].str.extract(r' - (\d+)$').astype(int).sum().values[0]
 
 total_gols_sp = gols_principal + gols_visitor
-print(df.columns.tolist())
 
+print("🔎 Registros com erro na extração do campo JOGO:")
+print(df_error_extract[['ROD', 'JOGO']].head(10))
+print(f"Total de registros com erro: {len(df_error_extract)}")
 
     # Gerando Grafico
 
