@@ -16,9 +16,6 @@ print(df.head())
 print(df_classificacao.head())
 print(len(df_classificacao) + len(df))
 
-# Remove a primeira linha (totalmente nula) e reinicia o índice
-df = df.drop(index=0).reset_index(drop=True)
-
 # A informação aparece apenas uma vez por rodada, e as demais partidas não têm o número da rodada preenchido 
 # o que torna a análise inconsistente.
 # preencher valores nulos da coluna ROD com o último valor não nulo acima
