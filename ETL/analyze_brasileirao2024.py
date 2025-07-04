@@ -6,23 +6,23 @@ from convert_file import extract_pdf_tables_to_excel
 # # from graphs import better_team, top5_filtered, pred_Winner, plot_previsao_cores_times
 # # from line_graph import plot_evolucao_top5
 
+# print path 'File/brasileiro'
 
-## Chamada para função de converter arquivo > extract_pdf_tables_to_excel ##
+# Chamada para função de converter arquivo > extract_pdf_tables_to_excel ##
 
-path_pdf_input = "File/Brasileiro_2024.pdf"
+# path_pdf_input = "File/Brasileiro_2024.pdf"
 
-file_excel = "Brasileiro_2024.xlsx"
+# file_excel = "Brasileiro_2024.xlsx"
 
-print("Iniciando o processo de extração e conversão...")
+# print("Iniciando o processo de extração e conversão...")
 
-success = extract_pdf_tables_to_excel(path_pdf_input, file_excel)
+# success = extract_pdf_tables_to_excel(path_pdf_input, file_excel)
 
-if success:
-        print("\nProcesso concluído com sucesso!")
-else:
-        print("\nO processo encontrou erros ou falhou.")
+# if success:
+#         print("\nProcesso concluído com sucesso!")
+# else:
+#         print("\nO processo encontrou erros ou falhou.")
         #---------------------------------------------------------------##
-
 
 
 # # all_able = pd.read_excel(path_excel, sheet_name=None)
