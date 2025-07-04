@@ -2,11 +2,14 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 import numpy as np
+from analyze import read
 from convert_file import extract_pdf_tables_to_excel
 # # from graphs import better_team, top5_filtered, pred_Winner, plot_previsao_cores_times
 # # from line_graph import plot_evolucao_top5
 
-# print path 'File/brasileiro'
+path = 'File/Brasileiro_2024.xlsx'
+
+read(path, 'excel')
 
 # Chamada para função de converter arquivo > extract_pdf_tables_to_excel ##
 
