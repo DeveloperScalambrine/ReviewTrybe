@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 import numpy as np
-from graphs import better_team
+from graphs import better_team, teste
 
 # Caminho para o arquivo Excel
 path_excel = "File/Tables.xlsx"
@@ -11,27 +11,27 @@ df = pd.read_excel(path_excel, sheet_name="Rodadas-2024")
 # df_classificacao = pd.read_excel(path_excel, sheet_name="Classificação")
 # df = all_able["Rodadas-2024"]
 # df_classificacao = all_able["Classificação"]
-top_times = better_team(df)
-print(top_times)
+top5_df = better_team(df)
+resultado = teste(df, top5_df)    # nova análise detalhada
+print(resultado)
 
-top5 = better_team(df)
+# top5 = better_team(df)
+# # Gera gráfico
+# plt.figure(figsize=(10, 6))
+# plt.barh(top5['Time'], top5['TotalPontos'], color='royalblue')
+# plt.xlabel("Total de Pontos")
+# plt.title("Top 5 Times com Mais Pontos até a 14ª Rodada")
+# plt.gca().invert_yaxis()  # Coloca o 1º no topo
 
-# Gera gráfico
-plt.figure(figsize=(10, 6))
-plt.barh(top5['Time'], top5['TotalPontos'], color='royalblue')
-plt.xlabel("Total de Pontos")
-plt.title("Top 5 Times com Mais Pontos até a 14ª Rodada")
-plt.gca().invert_yaxis()  # Coloca o 1º no topo
+# # Adiciona valores nas barras
+# for i, v in enumerate(top5['TotalPontos']):
+#     plt.text(v + 0.5, i, str(v), va='center')
 
-# Adiciona valores nas barras
-for i, v in enumerate(top5['TotalPontos']):
-    plt.text(v + 0.5, i, str(v), va='center')
-
-# Salva o gráfico
-caminho_grafico = "img/rod-14-melhores.png"
-plt.tight_layout()
-plt.savefig(caminho_grafico, dpi=300)
-print(f"✅ Gráfico salvo em: {caminho_grafico}")
+# # Salva o gráfico
+# caminho_grafico = "img/indicadores-14-melhores.png"
+# plt.tight_layout()
+# plt.savefig(caminho_grafico, dpi=300)
+# print(f"✅ Gráfico salvo em: {caminho_grafico}")
 
 # A informação aparece apenas uma vez por rodada, e as demais partidas não têm o número da rodada preenchido 
 # o que torna a análise inconsistente.

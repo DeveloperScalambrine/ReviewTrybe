@@ -82,55 +82,106 @@ plt.tight_layout()
 # # print("✅ Gráfico salvo como 'grafico_sao_paulo_sp.png'")
 
 
-def better_team(df, limite_rodada=14, top_n=5):
-    # Converte coluna de rodada para número
+def better_team(df):
+    # Etapa de preparação
     df['ROD_NUM'] = df['ROD'].str.extract(r'(\d+)').astype(int)
-    
-    # Filtra até a rodada definida
-    df = df[df['ROD_NUM'] <= limite_rodada].copy()
-
-    # Garante tipos inteiros
+    df = df[df['ROD_NUM'] <= 14].copy()
     df['Gols_M'] = df['Gols_M'].astype(int)
     df['Gols_V'] = df['Gols_V'].astype(int)
 
-    # Pontuação por jogo para mandante
-    df['Pontos_M'] = df.apply(lambda x: 3 if x['Gols_M'] > x['Gols_V'] else (1 if x['Gols_M'] == x['Gols_V'] else 0), axis=1)
-
-    # Pontuação por jogo para visitante
-    df['Pontos_V'] = df.apply(lambda x: 3 if x['Gols_V'] > x['Gols_M'] else (1 if x['Gols_V'] == x['Gols_M'] else 0), axis=1)
-
-    # Nome formatado dos times
-    df['Time_M'] = df['TimeMandante'].str.strip() + ' ' + df['UF_M']
-    df['Time_V'] = df['TimeVisitante'].str.strip() + ' ' + df['UF_V']
+    # Nome dos times
+    df['Mandante'] = df['TimeMandante'].str.strip() + ' ' + df['UF_M']
+    df['Visitante'] = df['TimeVisitante'].str.strip() + ' ' + df['UF_V']
 
     # Mandantes
-    mandantes = df.groupby('Time_M').agg(
-        PontosMandante=('Pontos_M', 'sum'),
-        GolsMandante=('Gols_M', 'sum')
-    ).reset_index().rename(columns={'Time_M': 'Time'})
+    mandante = df[['Mandante', 'Gols_M', 'Gols_V']].copy()
+    mandante.columns = ['Time', 'GolsFeitos', 'GolsSofridos']
+    mandante['Vitoria'] = (mandante['GolsFeitos'] > mandante['GolsSofridos']).astype(int)
+    mandante['Empate'] = (mandante['GolsFeitos'] == mandante['GolsSofridos']).astype(int)
+    mandante['PartidasMandante'] = 1
+    mandante['PartidasVisitante'] = 0
 
     # Visitantes
-    visitantes = df.groupby('Time_V').agg(
-        PontosVisitante=('Pontos_V', 'sum'),
-        GolsVisitante=('Gols_V', 'sum'),
-        PartidasVisitante=('Time_V', 'count')
-    ).reset_index().rename(columns={'Time_V': 'Time'})
+    visitante = df[['Visitante', 'Gols_V', 'Gols_M']].copy()
+    visitante.columns = ['Time', 'GolsFeitos', 'GolsSofridos']
+    visitante['Vitoria'] = (visitante['GolsFeitos'] > visitante['GolsSofridos']).astype(int)
+    visitante['Empate'] = (visitante['GolsFeitos'] == visitante['GolsSofridos']).astype(int)
+    visitante['PartidasMandante'] = 0
+    visitante['PartidasVisitante'] = 1
 
-    # Merge e preenchimento de valores ausentes
-    tabela = pd.merge(mandantes, visitantes, on='Time', how='outer').fillna(0)
+    # Junta tudo
+    df_total = pd.concat([mandante, visitante])
+
+    # Agrupa
+    resumo = df_total.groupby('Time').agg({
+        'GolsFeitos': 'sum',
+        'PartidasMandante': 'sum',
+        'PartidasVisitante': 'sum',
+        'Vitoria': 'sum',
+        'Empate': 'sum'
+    }).reset_index()
+
+    # Pontuação total
+    resumo['Pontos'] = (resumo['Vitoria'] * 3) + (resumo['Empate'] * 1)
+
+    # Ordena
+    top5 = resumo.sort_values(by='Pontos', ascending=False).head(5)
 
     # Conversão para inteiros
-    cols_int = ['PontosMandante', 'GolsMandante', 'PontosVisitante', 'GolsVisitante', 'PartidasVisitante']
-    for col in cols_int:
-        tabela[col] = tabela[col].astype(int)
+    cols_int = ['GolsFeitos', 'PartidasMandante', 'PartidasVisitante', 'Vitoria', 'Empate', 'Pontos']
+    top5[cols_int] = top5[cols_int].astype(int)
 
-    # Totalizadores
-    tabela['TotalPontos'] = tabela['PontosMandante'] + tabela['PontosVisitante']
-    tabela['TotalGols'] = tabela['GolsMandante'] + tabela['GolsVisitante']
+    return top5
 
-    # Ordenar pelo total de pontos
-    tabela_final = tabela[['Time', 'TotalPontos', 'TotalGols', 'PartidasVisitante']] \
-        .sort_values(by='TotalPontos', ascending=False) \
-        .head(top_n)
+def top5_filtered(df_original, top5):
+    # Filtra somente os 5 melhores times
+    times_top5 = top5['Time'].tolist()
 
-    return tabela_final
+    df = df_original.copy()
+    df['ROD_NUM'] = df['ROD'].str.extract(r'(\d+)').astype(int)
+    df = df[df['ROD_NUM'] <= 14].copy()
+    df['Gols_M'] = df['Gols_M'].astype(int)
+    df['Gols_V'] = df['Gols_V'].astype(int)
+
+    df['Mandante'] = df['TimeMandante'].str.strip() + ' ' + df['UF_M']
+    df['Visitante'] = df['TimeVisitante'].str.strip() + ' ' + df['UF_V']
+
+    # Mandantes
+    mandante = df[df['Mandante'].isin(times_top5)].copy()
+    mandante['Time'] = mandante['Mandante']
+    mandante['GolsFeitos'] = mandante['Gols_M']
+    mandante['Vitoria'] = (mandante['Gols_M'] > mandante['Gols_V']).astype(int)
+    mandante['Empate'] = (mandante['Gols_M'] == mandante['Gols_V']).astype(int)
+    mandante['Pontos'] = mandante['Vitoria'] * 3 + mandante['Empate'] * 1
+
+    # Visitantes
+    visitante = df[df['Visitante'].isin(times_top5)].copy()
+    visitante['Time'] = visitante['Visitante']
+    visitante['GolsFeitos'] = visitante['Gols_V']
+    visitante['Vitoria'] = (visitante['Gols_V'] > visitante['Gols_M']).astype(int)
+    visitante['Empate'] = (visitante['Gols_V'] == visitante['Gols_M']).astype(int)
+    visitante['Pontos'] = visitante['Vitoria'] * 3 + visitante['Empate'] * 1
+
+    # Agrupamento
+    resumo_mandante = mandante.groupby('Time').agg({
+        'GolsFeitos': 'sum',
+        'Pontos': 'sum'
+    }).rename(columns={
+        'GolsFeitos': 'GolsMandante',
+        'Pontos': 'PontosMandante'
+    })
+
+    resumo_visitante = visitante.groupby('Time').agg({
+        'GolsFeitos': 'sum',
+        'Pontos': 'sum'
+    }).rename(columns={
+        'GolsFeitos': 'GolsVisitante',
+        'Pontos': 'PontosVisitante'
+    })
+
+    # Junta as análises
+    analise_final = resumo_mandante.join(resumo_visitante, how='outer').fillna(0).astype(int)
+    analise_final['PontosTotal'] = analise_final['PontosMandante'] + analise_final['PontosVisitante']
+    analise_final = analise_final.reset_index()
+
+    return analise_final
