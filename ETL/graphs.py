@@ -2,6 +2,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 
+from sklearn.linear_model import LinearRegression
+import numpy as np
+
 path_excel = "File/Tables.xlsx" 
 
 
@@ -185,3 +188,39 @@ def top5_filtered(df_original, top5):
     analise_final = analise_final.reset_index()
 
     return analise_final
+
+def pred_Winner(df_original, top5):
+    summary = top5_filtered(df_original, top5)
+
+    summary['Jogos'] = 14
+
+    summary['MediaPontos'] = summary['PontosTotal'] / summary['Jogos']
+
+    summary['PontosPrevistos'] = summary['MediaPontos'] * 38
+
+    summary['MediaPontos'] = summary['MediaPontos'].round(2).astype(float)
+    summary['PontosPrevistos'] = summary['PontosPrevistos'].round().astype(int)
+
+    LIMIT_WINNER = 79
+
+    summary['ProbabilidadeCampeao'] = np.where(
+        summary['PontosPrevistos'] >= LIMIT_WINNER, 'Alta',
+        np.where(summary['PontosPrevistos'] >= 70, 'Média', 'Baixa')
+    )
+
+    return summary[['Time', 'PontosTotal', 'MediaPontos', 'PontosPrevistos', 'ProbabilidadeCampeao']]
+
+def plot_previsao(table):
+    plt.figure(figsize=(10, 6))
+    bars = plt.bar(table['Time'], table['PontosPrevistos'], color='dodgerblue')
+
+    for bar in bars:
+        altura = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2, altura + 0.5, f'{altura:.0f}', 
+                 ha='center', va='bottom', fontsize=9)
+    plt.title('🏆 Previsão de Pontuação Final - Brasileirão 2024')
+    plt.xlabel('Time')
+    plt.ylabel('Pontos Previstos')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.savefig('img/previsao_pontuacao.png', dpi=300)

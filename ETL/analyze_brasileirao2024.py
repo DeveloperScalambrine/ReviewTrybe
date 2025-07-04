@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 import numpy as np
-from graphs import better_team, teste
+from graphs import better_team, top5_filtered, pred_Winner, plot_previsao
 
 # Caminho para o arquivo Excel
 path_excel = "File/Tables.xlsx"
@@ -12,9 +12,8 @@ df = pd.read_excel(path_excel, sheet_name="Rodadas-2024")
 # df = all_able["Rodadas-2024"]
 # df_classificacao = all_able["Classificação"]
 top5_df = better_team(df)
-resultado = teste(df, top5_df)    # nova análise detalhada
-print(resultado)
-
+forecast = pred_Winner(df, top5_df)
+plot_previsao(forecast)
 # top5 = better_team(df)
 # # Gera gráfico
 # plt.figure(figsize=(10, 6))
