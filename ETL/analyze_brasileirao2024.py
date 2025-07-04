@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 import numpy as np
-from graphs import better_team, top5_filtered, pred_Winner, plot_previsao
+from graphs import better_team, top5_filtered, pred_Winner, plot_previsao_cores_times
 from line_graph import plot_evolucao_top5
 
 # Caminho para o arquivo Excel
@@ -12,14 +12,24 @@ df = pd.read_excel(path_excel, sheet_name="Rodadas-2024")
 # df_classificacao = pd.read_excel(path_excel, sheet_name="Classificação")
 # df = all_able["Rodadas-2024"]
 # df_classificacao = all_able["Classificação"]
-# top5_df = better_team(df)
-# forecast = pred_Winner(df, top5_df)
+top5_df = better_team(df)
+forecast = pred_Winner(df, top5_df)
 # plot_previsao(forecast)
 # Exemplo de uso em main
 
     # Ajuste o caminho conforme seu diretório de projeto
-plot_evolucao_top5(path_excel)
-print(f"✅ Gráfico salvo em {os.path.abspath('img/indicadores_top5_linha.png')}")
+# plot_evolucao_top5(path_excel)
+# print(f"✅ Gráfico salvo em {os.path.abspath('img/indicadores_top5_linha.png')}")
+
+graf_data = forecast[['Time','PontosPrevistos','MediaPontos']]
+
+plot_previsao_cores_times(
+    table=forecast[['Time', 'PontosPrevistos', 'MediaPontos']],
+    limiar_campeao=75,
+    jogos=14,
+    total_rodadas=38,
+    output_path="img/previsao_cores.png"
+)
 
 # top5 = better_team(df)
 

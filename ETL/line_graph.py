@@ -50,6 +50,9 @@ def plot_evolucao_top5(filepath: str, sheet_name: str = "Rodadas-2024", limite_r
 
     # Pivot para gráfico
     pivot = pont.pivot(index='ROD_NUM', columns='Time', values='PontosAcumulados').fillna(method='ffill').fillna(0)
+    final_vals = pivot.iloc[-1].sort_values(ascending=False)
+    pivot = pivot[final_vals.index]
+
 
     # Garante pasta de saída
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
@@ -74,7 +77,7 @@ def plot_evolucao_top5(filepath: str, sheet_name: str = "Rodadas-2024", limite_r
     # Customiza aparência
     ax.set_facecolor('#f5f5f5')
     ax.grid(color='white', linestyle='-', linewidth=1.5)
-    ax.set_title(f"Evolução dos Pontos Acumulados - Top 5 até a {limite_rodada}ª Rodada", fontsize=18, color='#222222', pad=20)
+    ax.set_title(f"Evolução das Equipes - Top 5 até a {limite_rodada}ª Rodada", fontsize=18, color='#222222', pad=20)
     ax.set_xlabel("Rodada", fontsize=14, color='#333333', labelpad=10)
     ax.set_ylabel("Pontos Acumulados", fontsize=14, color='#333333', labelpad=10)
     ax.tick_params(axis='x', colors='#444444', labelsize=12)

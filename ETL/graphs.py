@@ -210,17 +210,115 @@ def pred_Winner(df_original, top5):
 
     return summary[['Time', 'PontosTotal', 'MediaPontos', 'PontosPrevistos', 'ProbabilidadeCampeao']]
 
-def plot_previsao(table):
-    plt.figure(figsize=(10, 6))
-    bars = plt.bar(table['Time'], table['PontosPrevistos'], color='dodgerblue')
+# def plot_previsao(table, limiar_campeao=75, jogos=14, total_rodadas=38, output_path="img/previsao_pontuacao.png"):
+#     """
+#     Plota a previsão de pontuação final para o Brasileirão 2024.
 
-    for bar in bars:
-        altura = bar.get_height()
-        plt.text(bar.get_x() + bar.get_width()/2, altura + 0.5, f'{altura:.0f}', 
-                 ha='center', va='bottom', fontsize=9)
-    plt.title('🏆 Previsão de Pontuação Final - Brasileirão 2024')
-    plt.xlabel('Time')
-    plt.ylabel('Pontos Previstos')
-    plt.xticks(rotation=45)
+#     Parâmetros:
+#     - table: DataFrame com colunas ['Time', 'PontosPrevistos', 'MediaPontos']
+#     - limiar_campeao: pontos mínimos para alta probabilidade de título
+#     - jogos: número de rodadas já disputadas
+#     - total_rodadas: total de rodadas no campeonato
+#     - output_path: caminho para salvar o gráfico
+#     """
+#     # Ordena para barras horizontais de baixo (menores) para cima (maiores)
+#     table = table.sort_values("PontosPrevistos", ascending=True)
+
+#     # Normaliza cores entre min e máx previstos
+#     vals = table["PontosPrevistos"]
+#     norm = plt.Normalize(vals.min(), vals.max())
+#     cmap = plt.cm.get_cmap("viridis")
+#     colors = cmap(norm(vals))
+
+#     # Cria figura
+#     fig, ax = plt.subplots(figsize=(10, 6), facecolor="#f0f0f0")
+#     ax.set_facecolor("#f0f0f0")
+
+#     # Barras horizontais
+#     bars = ax.barh(table["Time"], table["PontosPrevistos"], color=colors, edgecolor="#ffffff", height=0.6)
+
+#     # Linha de limiar de campeão
+#     ax.axvline(limiar_campeao, color="crimson", linestyle="--", linewidth=2,
+#                label=f"Limiar Campeão: {limiar_campeao} pts")
+
+#     # Anotações: pontos e média
+#     for bar, m in zip(bars, table["MediaPontos"]):
+#         x = bar.get_width()
+#         y = bar.get_y() + bar.get_height()/2
+#         ax.text(x + 0.5, y,
+#                 f"{int(x)} pts\nMédia/jogo: {m:.2f}",
+#                 va="center", ha="left", fontsize=9, color="#222222")
+
+#     # Títulos e rótulos
+#     ax.set_title("🏆 Previsão de Pontos Finais – Brasileirão 2024", fontsize=16, color="#222222", pad=15)
+#     ax.set_xlabel(f"Pontos Previstos (até {jogos}/{total_rodadas} rodadas)", fontsize=12, color="#444444", labelpad=10)
+#     ax.set_ylabel("Time", fontsize=12, color="#444444", labelpad=10)
+#     ax.tick_params(axis='both', colors="#555555", labelsize=10)
+#     ax.grid(axis="x", color="white", linestyle="-", linewidth=1)
+
+#     # Legenda
+#     ax.legend(frameon=False, fontsize=10, loc="lower right")
+
+#     plt.tight_layout()
+#     os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
+#     fig.savefig(output_path, dpi=300, facecolor=fig.get_facecolor())
+#     plt.close(fig)
+def plot_previsao_cores_times(table, limiar_campeao=75, jogos=14, total_rodadas=38, output_path="img/previsao_cores.png"):
+
+    cores_times = {
+        'Flamengo RJ': '#C80000',
+        'Palmeiras SP': '#1C9240',
+        'São Paulo SP': '#DF0A0A',
+        'Botafogo RJ': '#000000',
+        'Grêmio RS': '#0099DA',
+        'Internacional RS': '#ED1B24',
+        'Corinthians SP': '#111111',
+        'Atlético MG': '#222222',
+        'Atlético GO': '#D70000',
+        'Cruzeiro MG': '#0033A0',
+        'Fortaleza CE': '#004AAD',
+        'Fluminense RJ': '#006600',
+        'Bahia BA': '#005CA9',
+        'Cuiabá MT': '#007F3E',
+        'Vasco da Gama RJ': '#231F20',
+        'Red Bull Bragantino SP': '#FFFFFF',
+        'Juventude RS': '#007B3A',
+        'Vitória BA': '#CC0000',
+        'Athletico PR': '#D10000',
+        'Criciúma SC': '#FFD700'
+    }
+
+    table = table.sort_values("PontosPrevistos", ascending=True)
+
+    fig, ax = plt.subplots(figsize=(10, 6), facecolor="#f7f7f7")
+    ax.set_facecolor("#f7f7f7")
+
+    # Aplica a cor do time (ou fallback azul)
+    cores = [cores_times.get(time, 'steelblue') for time in table["Time"]]
+
+    bars = ax.barh(table["Time"], table["PontosPrevistos"], color=cores, edgecolor="white", height=0.6)
+
+    # Linha de limiar para título
+    ax.axvline(limiar_campeao, color="crimson", linestyle="--", linewidth=2,
+               label=f"Limiar Campeão: {limiar_campeao} pts")
+
+    # Anotações
+    for bar, media in zip(bars, table["MediaPontos"]):
+        x = bar.get_width()
+        y = bar.get_y() + bar.get_height() / 2
+        ax.text(x + 0.8, y,
+                f"{int(x)} pts\n{media:.2f}/jogo",
+                va="center", ha="left", fontsize=9, color="#222")
+
+    ax.set_title("🎯 Previsão Final do Brasileirão 2024", fontsize=16, color="#111", pad=15)
+    ax.set_xlabel(f"Pontos Previstos (após {jogos}/{total_rodadas} rodadas)", fontsize=12)
+    ax.set_ylabel("Time", fontsize=12)
+    ax.tick_params(axis='both', labelsize=10, colors="#333")
+    ax.grid(axis="x", linestyle="--", linewidth=0.5, color="#cccccc")
+
+    ax.legend(loc="lower right", fontsize=10, frameon=False)
+
     plt.tight_layout()
-    plt.savefig('img/previsao_pontuacao.png', dpi=300)
+    os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
+    fig.savefig(output_path, dpi=300, facecolor=fig.get_facecolor())
+    plt.close(fig)
