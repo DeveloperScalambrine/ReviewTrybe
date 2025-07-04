@@ -12,6 +12,8 @@ O principal objetivo é aplicar técnicas de engenharia e análise de dados para
   - Vide análise até a 14ª rodada, identificando os 5 primeiros times, bem como a probabilidade de se tornarem campeões, usando pontos, gols e partidas como visitante/mandante.
   - A análise será aprimorada com modelos de predição para verificar a acurácia das projeções.
   - **Resultados apresentados em um arquivo PPT (PowerPoint) de análise.**
+  -  - **Link na Nuvem:** [Apresentação Análise Brasileiro 2024](https://docs.google.com/presentation/d/1_pESzz4cRUk76GZ4W93ttyQG-awJwW9qau35xQX5Kgk/edit?slide=id.p#slide=id.p)
+    - **Caminho Local:** `/home/carlos/ReviewTrybe/ETL/Apresentação/Analise Brasileiro 2024.pptx`
 - Como está o desempenho dentro e fora de casa?
 - Quais rodadas foram mais produtivas para determinado time?
 - Como construir uma classificação automática baseada nos resultados?
