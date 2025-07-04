@@ -9,8 +9,9 @@ Este projeto realiza uma análise completa da Tabela do Campeonato Brasileiro S�
 O principal objetivo é aplicar técnicas de engenharia e análise de dados para extrair, tratar e interpretar informações da tabela oficial do Brasileirão 2024, respondendo perguntas como:
 
 - Quais times estão se destacando?
-  Vide analise até a 14 rodada, trazendo Pontos, gols e partidas visitante
-  melhorar a analise, e usar modelos de predição para ver se acerta.
+  - Vide análise até a 14ª rodada, identificando os 5 primeiros times, bem como a probabilidade de se tornarem campeões, usando pontos, gols e partidas como visitante/mandante.
+  - A análise será aprimorada com modelos de predição para verificar a acurácia das projeções.
+  - **Resultados apresentados em um arquivo PPT (PowerPoint) de análise.**
 - Como está o desempenho dentro e fora de casa?
 - Quais rodadas foram mais produtivas para determinado time?
 - Como construir uma classificação automática baseada nos resultados?
