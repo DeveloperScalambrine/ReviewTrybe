@@ -310,7 +310,7 @@ def plot_previsao_cores_times(table, limiar_campeao=75, jogos=14, total_rodadas=
                 f"{int(x)} pts\n{media:.2f}/jogo",
                 va="center", ha="left", fontsize=9, color="#222")
 
-    ax.set_title("🎯 Previsão Final do Brasileirão 2024", fontsize=16, color="#111", pad=15)
+    ax.set_title("Previsão Final do Brasileirão 2024", fontsize=16, color="#111", pad=15)
     ax.set_xlabel(f"Pontos Previstos (após {jogos}/{total_rodadas} rodadas)", fontsize=12)
     ax.set_ylabel("Time", fontsize=12)
     ax.tick_params(axis='both', labelsize=10, colors="#333")
