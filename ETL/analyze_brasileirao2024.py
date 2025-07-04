@@ -21,7 +21,6 @@ df = pd.read_excel(path_excel, sheet_name="Rodadas-2024")
 plot_evolucao_top5(path_excel)
 print(f"✅ Gráfico salvo em {os.path.abspath('img/indicadores_top5_linha.png')}")
 
-
 # top5 = better_team(df)
 
 # # Gera gráfico de linhas
