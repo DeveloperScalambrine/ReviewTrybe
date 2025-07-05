@@ -1,5 +1,5 @@
 from analyze import analyze_Gol_Per_Round, analyze_Per_Round, analyze_Per_Team, reading_tabs
-from graphs import graph_team_round_gol
+from graphs import graph_team_round_gol, graph_five_top
 
 # from convert_file import extract_pdf_tables_to_excel
 # from graphs import better_team, top5_filtered, pred_Winner, plot_previsao_cores_times, graph_nome
@@ -29,12 +29,7 @@ from graphs import graph_team_round_gol
 # analyze_Per_Round(7)
 #-------------------------------------------------#
 
-reading_tabs()
-# # all_able = pd.read_excel(path_excel, sheet_name=None)
-# df = pd.read_excel(path_excel, sheet_name="Rodadas-2024")
-# # df_classificacao = pd.read_excel(path_excel, sheet_name="Classificação")
-# # df = all_able["Rodadas-2024"]
-# # df_classificacao = all_able["Classificação"]
+reading_tabs(graph_five_top)
 # # top5_df = better_team(df)
 # # forecast = pred_Winner(df, top5_df)
 # # plot_previsao(forecast)

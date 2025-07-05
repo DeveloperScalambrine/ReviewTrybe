@@ -24,6 +24,19 @@ def graph_team_round_gol(gols_por_rodada, rodada_max, rodada_min):
     plt.savefig('img/Gols Sao Paulo.png', dpi=300)
     print("✅ Gráfico salvo como 'Gols Sao Paulo.png'")
 
+def graph_five_top(top_five):
+    plt.figure(figsize=(10, 6))
+    plt.bar(top_five["Nome dos Times"], top_five["Pontos"], color="royalblue")
+    plt.title("Top 5 Times - Pontuação")
+    plt.xlabel("Times")
+    plt.ylabel("Pontos")
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+
+    # Salva o gráfico
+    plt.savefig("img/Cinco primeiros.png", dpi=300)
+    print("✅ Gráfico salvo em 'img/Cinco primeiros'")
+
 # def better_team(df):
 #     # Etapa de preparação
 #     df['ROD_NUM'] = df['ROD'].str.extract(r'(\d+)').astype(int)

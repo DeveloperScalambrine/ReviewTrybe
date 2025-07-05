@@ -94,11 +94,15 @@ def analyze_Per_Round(round):
     df_filter_round = df[df['ROD_NUM'] == round]
 
 # Acessar uma aba específica por nome passa o nome da aba no segundo parametro
-def reading_tabs():
+def reading_tabs(graph_func=None):
     all_tabs = pd.read_excel(paths[1], sheet_name=None)
 
     df_rounds = all_tabs["Rodadas-2024"]
     df_classification = all_tabs["Classificação"]
+    df_classification.columns = df_classification.columns.str.strip()
+    top_five = df_classification.sort_values(by="Pontos", ascending=False).head(5)
+    
+    if graph_func:
+       graph_func(top_five)
 
-    print(df_rounds.head(5))
-    print(df_classification.head(5))
+    return top_five
