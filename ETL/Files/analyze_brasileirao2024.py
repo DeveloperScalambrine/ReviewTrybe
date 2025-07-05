@@ -58,15 +58,15 @@ def main():
         limiar_campeao=75,
         jogos=14,
         total_rodadas=38,
-        output_path="img/previsao_cores.png"
+        output_path="/home/carlos/ReviewTrybe/ETL/img/previsao_cores.png"
     )
 
     # 🟡 Ative conforme necessidade:
-    # analyze_Gol_Per_Round(graph_team_round_gol)
-    # better_team(graph_better_team)
-    # reading_tabs(graph_five_top)
-    # plot_previsao()
-    # plot_evolucao_top5(paths[1])
+    analyze_Gol_Per_Round(graph_team_round_gol)
+    better_team(graph_better_team)
+    reading_tabs(graph_five_top)
+    plot_previsao()
+    plot_evolucao_top5(paths[1])
     # analyze_Per_Round(7)
 
     print("✅ Análise finalizada com sucesso!")

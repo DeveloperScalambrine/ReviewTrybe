@@ -1,4 +1,5 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 import numpy as np
 import os
 
@@ -254,8 +255,6 @@ def pred_Winner():
     )
 
     return summary[['Time', 'PontosTotal', 'MediaPontos', 'PontosPrevistos', 'ProbabilidadeCampeao']]
-import os
-import matplotlib.pyplot as plt
 
 def plot_previsao_cores_times(table, limiar_campeao=75, jogos=14, total_rodadas=38, output_path="img/previsao_pontuacao.png"):
 

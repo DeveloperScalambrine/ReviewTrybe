@@ -61,16 +61,15 @@ def graph_better_team(top5):
         plt.text(v + 0.5, i, str(v), va='center')
 
     # Salva o gráfico
-    path_graph = "img/Os 5 melhores 14 Rodada.png"
+    path_graph = "/home/carlos/ReviewTrybe/ETL/img/Os 5 melhores 14 Rodada.png"
 
     # Garante que a pasta 'img/' exista
-    os.makedirs(os.path.dirname(path_graph), exist_ok=True)
 
     plt.tight_layout()
     plt.savefig(path_graph, dpi=300)
     print(f"✅ Gráfico salvo em: {path_graph}")
 
-def plot_previsao(limiar_campeao=75, jogos=14, total_rodadas=38, output_path="img/previsao_pontuacao.png"):
+def plot_previsao(limiar_campeao=75, jogos=14, total_rodadas=38, output_path="/home/carlos/ReviewTrybe/ETL/img/previsao_pontuacao.png"):
     """
     Gera gráfico com previsão de pontuação final do Brasileirão 2024 para os times do top 5.
     """
@@ -117,6 +116,7 @@ def plot_previsao(limiar_campeao=75, jogos=14, total_rodadas=38, output_path="im
     ax.legend(frameon=False, fontsize=10, loc="lower right")
 
     plt.tight_layout()
+    # plt.savefig(os.path.join(OUTPUT_IMG_DIR, 'Previsao.png'), dpi=300)
     os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
     fig.savefig(output_path, dpi=300, facecolor=fig.get_facecolor())
     plt.close(fig)
