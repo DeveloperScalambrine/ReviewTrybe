@@ -1,13 +1,9 @@
-import pandas as pd
-import matplotlib.pyplot as plt
-import os
-import numpy as np
-from analyze import analyze_Per_Team
-from convert_file import extract_pdf_tables_to_excel
-# # from graphs import better_team, top5_filtered, pred_Winner, plot_previsao_cores_times
+from analyze import analyze_Gol_Per_Round
+from graphs import graph_nome
+# from convert_file import extract_pdf_tables_to_excel
+# from graphs import better_team, top5_filtered, pred_Winner, plot_previsao_cores_times, graph_nome
 # # from line_graph import plot_evolucao_top5
 
-analyze_Per_Team()
 ## Chamada para função de converter arquivo > extract_pdf_tables_to_excel ##
 
 # path_pdf_input = "File/Brasileiro_2024.pdf"
@@ -23,6 +19,9 @@ analyze_Per_Team()
 # else:
 #         print("\nO processo encontrou erros ou falhou.")
         #---------------------------------------------------------------##
+
+        ## Chamando a função para analise de gols por rodada da equipe São Paulo, recebe como parametro uma função de grafico ##
+analyze_Gol_Per_Round(graph_nome)
 
 
 # # all_able = pd.read_excel(path_excel, sheet_name=None)

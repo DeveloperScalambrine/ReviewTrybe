@@ -51,4 +51,35 @@ def analyze_Per_Team():
 
     total_gols_sp = gols_principal + gols_visitor
 
-    print(f"Gols marcados por São Paulo SP na primeira e segunda rodada: {total_gols_sp}")
+    return df
+    
+def analyze_Gol_Per_Round(graph_func=None):
+    df = analyze_Per_Team()
+
+    # Filtra São Paulo como mandante e visitante
+    sp_mandante = df[df['GolMandante'].str.strip().str.contains(r'^São Paulo SP', case=False, regex=True)].copy()
+    sp_visitante = df[df['GolVisitante'].str.strip().str.contains(r'^São Paulo SP', case=False, regex=True)].copy()
+
+    sp_mandante['GOLS'] = sp_mandante['GolMandante'].str.extract(r'(\d+)$').astype(int)
+    sp_mandante['TIME'] = 'São Paulo SP'
+    sp_mandante['TIPO'] = 'Mandante'
+
+    sp_visitante['GOLS'] = sp_visitante['GolVisitante'].str.extract(r'(\d+)$').astype(int)
+    sp_visitante['TIME'] = 'São Paulo SP'
+    sp_visitante['TIPO'] = 'Visitante'
+
+    # Junta os dois dataframes
+    sp_total = pd.concat([sp_mandante, sp_visitante])
+
+    sp_total['ROD_NUM'] = sp_total['ROD_NUM'].astype(int)
+
+    gols_por_rodada = sp_total.groupby('ROD_NUM')['GOLS'].sum()
+
+    rodada_max = gols_por_rodada.idxmax()
+    rodada_min = gols_por_rodada.idxmin()
+    
+    if graph_func:
+       graph_func(gols_por_rodada, rodada_max, rodada_min)
+
+    return gols_por_rodada, rodada_max, rodada_min
+
