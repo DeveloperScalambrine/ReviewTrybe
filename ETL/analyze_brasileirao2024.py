@@ -2,16 +2,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 import numpy as np
-from analyze import read
+from analyze import analyze_Per_Team
 from convert_file import extract_pdf_tables_to_excel
 # # from graphs import better_team, top5_filtered, pred_Winner, plot_previsao_cores_times
 # # from line_graph import plot_evolucao_top5
 
-path = 'File/Brasileiro_2024.xlsx'
-
-read(path, 'excel')
-
-# Chamada para função de converter arquivo > extract_pdf_tables_to_excel ##
+analyze_Per_Team()
+## Chamada para função de converter arquivo > extract_pdf_tables_to_excel ##
 
 # path_pdf_input = "File/Brasileiro_2024.pdf"
 
@@ -91,28 +88,6 @@ read(path, 'excel')
 # # plt.tight_layout()
 # # plt.savefig(caminho_grafico, dpi=300)
 # # print(f"✅ Gráfico salvo em: {caminho_grafico}")
-
-# # A informação aparece apenas uma vez por rodada, e as demais partidas não têm o número da rodada preenchido 
-# # o que torna a análise inconsistente.
-# # preencher valores nulos da coluna ROD com o último valor não nulo acima
-# df['ROD'] = df['ROD'].ffill()
-
-# df.at[0, 'DATA'] = '13/04'
-# df.at[0, 'DIA']  = 'sab'
-
-# # Preenche DATA e DIA apenas dentro de cada grupo de ROD
-# df[['DATA', 'DIA']] = df.groupby('ROD')[['DATA', 'DIA']].ffill()
-
-# df['JOGO'] = df['JOGO'].astype(str)
-# df[['TimeMandante', 'UF_M', 'Gols_M', 'Gols_V', 'TimeVisitante', 'UF_V']] = df['JOGO'].str.extract(
-#     r'^(.*?)\s+([A-Z]{2})\s+(\d+)\s+x\s+(\d+)\s+(.*?)\s+([A-Z]{2})$'
-# )
-
-# mask_invalid = df[['TimeMandante', 'UF_M', 'Gols_M', 'Gols_V', 'TimeVisitante', 'UF_V']].isnull().any(axis=1)
-# df_error_extract = df[mask_invalid]
-
-# df['GolMandante'] = df['TimeMandante'].str.strip() + ' ' + df['UF_M'] + ' - ' + df['Gols_M']
-# df['GolVisitante'] = df['TimeVisitante'].str.strip() + ' ' + df['UF_V'] + ' - ' + df['Gols_V']
 
 #     #  Pequena analise filtrando por equipe e rodada
 # # df_filter_2rod = df[df['ROD'].isin(['1ª', '2ª', '3ª'])]
