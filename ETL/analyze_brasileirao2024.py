@@ -1,5 +1,6 @@
-from analyze import analyze_Gol_Per_Round
-from graphs import graph_nome
+from analyze import analyze_Gol_Per_Round, analyze_Per_Round, analyze_Per_Team
+from graphs import graph_team_round_gol
+
 # from convert_file import extract_pdf_tables_to_excel
 # from graphs import better_team, top5_filtered, pred_Winner, plot_previsao_cores_times, graph_nome
 # # from line_graph import plot_evolucao_top5
@@ -20,8 +21,10 @@ from graphs import graph_nome
 #         print("\nO processo encontrou erros ou falhou.")
         #---------------------------------------------------------------##
 
-        ## Chamando a função para analise de gols por rodada da equipe São Paulo, recebe como parametro uma função de grafico ##
-analyze_Gol_Per_Round(graph_nome)
+## Chamando a função para analise de gols por rodada da equipe São Paulo, recebe como parametro uma função de grafico ##
+# analyze_Gol_Per_Round(graph_team_round_gol)
+##--------------------------------------------------------------------------------------------------##
+analyze_Per_Round(38)
 
 
 # # all_able = pd.read_excel(path_excel, sheet_name=None)
@@ -87,25 +90,4 @@ analyze_Gol_Per_Round(graph_nome)
 # # plt.tight_layout()
 # # plt.savefig(caminho_grafico, dpi=300)
 # # print(f"✅ Gráfico salvo em: {caminho_grafico}")
-
-#     #  Pequena analise filtrando por equipe e rodada
-# # df_filter_2rod = df[df['ROD'].isin(['1ª', '2ª', '3ª'])]
-# df['ROD_NUM'] = df['ROD'].str.extract(r'(\d+)').astype(int)
-
-# # Filtra do início até a segunda rodada
-# df_filter_2rod = df[df['ROD_NUM'] <= 10]
-
-# principal = df_filter_2rod[df_filter_2rod['GolMandante'].str.contains(r'^São Paulo SP', regex=True)]
-
-# visitor = df_filter_2rod[df_filter_2rod['GolVisitante'].str.contains(r'^São Paulo SP', regex=True)]
-
-# gols_principal = principal['GolMandante'].str.extract(r' - (\d+)$').astype(int).sum().values[0]
-# gols_visitor = visitor['GolVisitante'].str.extract(r' - (\d+)$').astype(int).sum().values[0]
-
-# total_gols_sp = gols_principal + gols_visitor
-# print(df_filter_2rod.columns[12])
-# print(df_filter_2rod['GolMandante'].head(5))
-
-# # df.to_excel('File/Brasileiro_2024_limpo.xlsx', index=False)
-# # print("📁 Arquivo salvo como 'File/Brasileiro_2024_limpo.xlsx'")
 

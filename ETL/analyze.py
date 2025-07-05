@@ -26,17 +26,20 @@ def analyze_Per_Team():
     df = read(path, "excel")
     
     df['JOGO'] = df['JOGO'].astype(str)
-
-    # Extrai os dados usando expressão regular
     df[['TimeMandante', 'UF_M', 'Gols_M', 'Gols_V', 'TimeVisitante', 'UF_V']] = df['JOGO'].str.extract(
-        r'^(.*?)\s+([A-Z]{2})\s+(\d+)\s+x\s+(\d+)\s+(.*?)\s+([A-Z]{2})$'
+    r'^(.*?)\s+([A-Z]{2})\s+(\d+)\s+x\s+(\d+)\s+(.*?)\s+([A-Z]{2})$'
     )
+
+    mask_invalid = df[['TimeMandante', 'UF_M', 'Gols_M', 'Gols_V', 'TimeVisitante', 'UF_V']].isnull().any(axis=1)
+    df_error_extract = df[mask_invalid]
+
+    df['GolMandante'] = df['TimeMandante'].str.strip() + ' ' + df['UF_M'] + ' - ' + df['Gols_M']
+    df['GolVisitante'] = df['TimeVisitante'].str.strip() + ' ' + df['UF_V'] + ' - ' + df['Gols_V']
 
     # Cria colunas com os textos formatados
     df['GolMandante'] = df['TimeMandante'].str.strip() + ' ' + df['UF_M'] + ' - ' + df['Gols_M']
     df['GolVisitante'] = df['TimeVisitante'].str.strip() + ' ' + df['UF_V'] + ' - ' + df['Gols_V']
 
-    # df_filter_2rod = df[df['ROD'].isin(['1ª', '2ª', '3ª'])]
     df['ROD_NUM'] = df['ROD'].str.extract(r'(\d+)').astype(int)
 
 # Filtra do início até a segunda rodada
@@ -52,7 +55,7 @@ def analyze_Per_Team():
     total_gols_sp = gols_principal + gols_visitor
 
     return df
-    
+
 def analyze_Gol_Per_Round(graph_func=None):
     df = analyze_Per_Team()
 
@@ -80,6 +83,9 @@ def analyze_Gol_Per_Round(graph_func=None):
     
     if graph_func:
        graph_func(gols_por_rodada, rodada_max, rodada_min)
-
+    
     return gols_por_rodada, rodada_max, rodada_min
 
+def analyze_Per_Round(round):
+    df = analyze_Per_Team()
+    df_filter_round = df[df['ROD_NUM'] == round]

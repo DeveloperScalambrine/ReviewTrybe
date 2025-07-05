@@ -1,12 +1,8 @@
 import matplotlib.pyplot as plt
-from analyze import analyze_Gol_Per_Round
 # from sklearn.linear_model import LinearRegression
 # import numpy as np
 
-
-df = analyze_Gol_Per_Round()
-
-def graph_nome(gols_por_rodada, rodada_max, rodada_min):
+def graph_team_round_gol(gols_por_rodada, rodada_max, rodada_min):
     
     # --- 📊 Gráfico ---
     plt.figure(figsize=(10, 6))
