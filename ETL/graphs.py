@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
+import os
+from analyze import pred_Winner
 # from sklearn.linear_model import LinearRegression
 # import numpy as np
 
@@ -55,133 +57,60 @@ def graph_better_team(top5):
     plt.savefig(path_graph, dpi=300)
     print(f"✅ Gráfico salvo em: {path_graph}")
 
-# def top5_filtered(df_original, top5):
-#     # Filtra somente os 5 melhores times
-#     times_top5 = top5['Time'].tolist()
+def plot_previsao(limiar_campeao=75, jogos=14, total_rodadas=38, output_path="img/previsao_pontuacao.png"):
+    """
+    Gera gráfico com previsão de pontuação final do Brasileirão 2024 para os times do top 5.
+    """
 
-#     df = df_original.copy()
-#     df['ROD_NUM'] = df['ROD'].str.extract(r'(\d+)').astype(int)
-#     df = df[df['ROD_NUM'] <= 14].copy()
-#     df['Gols_M'] = df['Gols_M'].astype(int)
-#     df['Gols_V'] = df['Gols_V'].astype(int)
+    # Busca os dados previstos
+    table = pred_Winner()
 
-#     df['Mandante'] = df['TimeMandante'].str.strip() + ' ' + df['UF_M']
-#     df['Visitante'] = df['TimeVisitante'].str.strip() + ' ' + df['UF_V']
+    # Ordena para barras horizontais de baixo (menores) para cima (maiores)
+    table = table.sort_values("PontosPrevistos", ascending=True)
 
-#     # Mandantes
-#     mandante = df[df['Mandante'].isin(times_top5)].copy()
-#     mandante['Time'] = mandante['Mandante']
-#     mandante['GolsFeitos'] = mandante['Gols_M']
-#     mandante['Vitoria'] = (mandante['Gols_M'] > mandante['Gols_V']).astype(int)
-#     mandante['Empate'] = (mandante['Gols_M'] == mandante['Gols_V']).astype(int)
-#     mandante['Pontos'] = mandante['Vitoria'] * 3 + mandante['Empate'] * 1
+    # Normaliza cores entre min e máx previstos
+    vals = table["PontosPrevistos"]
+    norm = plt.Normalize(vals.min(), vals.max())
+    cmap = plt.cm.get_cmap("viridis")
+    colors = cmap(norm(vals))
 
-#     # Visitantes
-#     visitante = df[df['Visitante'].isin(times_top5)].copy()
-#     visitante['Time'] = visitante['Visitante']
-#     visitante['GolsFeitos'] = visitante['Gols_V']
-#     visitante['Vitoria'] = (visitante['Gols_V'] > visitante['Gols_M']).astype(int)
-#     visitante['Empate'] = (visitante['Gols_V'] == visitante['Gols_M']).astype(int)
-#     visitante['Pontos'] = visitante['Vitoria'] * 3 + visitante['Empate'] * 1
+    # Cria figura
+    fig, ax = plt.subplots(figsize=(10, 6), facecolor="#f0f0f0")
+    ax.set_facecolor("#f0f0f0")
 
-#     # Agrupamento
-#     resumo_mandante = mandante.groupby('Time').agg({
-#         'GolsFeitos': 'sum',
-#         'Pontos': 'sum'
-#     }).rename(columns={
-#         'GolsFeitos': 'GolsMandante',
-#         'Pontos': 'PontosMandante'
-#     })
+    # Barras horizontais
+    bars = ax.barh(table["Time"], table["PontosPrevistos"], color=colors, edgecolor="#ffffff", height=0.6)
 
-#     resumo_visitante = visitante.groupby('Time').agg({
-#         'GolsFeitos': 'sum',
-#         'Pontos': 'sum'
-#     }).rename(columns={
-#         'GolsFeitos': 'GolsVisitante',
-#         'Pontos': 'PontosVisitante'
-#     })
+    # Linha de limiar de campeão
+    ax.axvline(limiar_campeao, color="crimson", linestyle="--", linewidth=2,
+               label=f"Limiar Campeão: {limiar_campeao} pts")
 
-#     # Junta as análises
-#     analise_final = resumo_mandante.join(resumo_visitante, how='outer').fillna(0).astype(int)
-#     analise_final['PontosTotal'] = analise_final['PontosMandante'] + analise_final['PontosVisitante']
-#     analise_final = analise_final.reset_index()
+    # Anotações
+    for bar, m in zip(bars, table["MediaPontos"]):
+        x = bar.get_width()
+        y = bar.get_y() + bar.get_height() / 2
+        ax.text(x + 0.5, y,
+                f"{int(x)} pts\nMédia/jogo: {m:.2f}",
+                va="center", ha="left", fontsize=9, color="#222222")
 
-#     return analise_final
+    # Títulos e rótulos
+    ax.set_title("🏆 Previsão de Pontos Finais – Brasileirão 2024", fontsize=16, color="#222222", pad=15)
+    ax.set_xlabel(f"Pontos Previstos (até {jogos}/{total_rodadas} rodadas)", fontsize=12, color="#444444", labelpad=10)
+    ax.set_ylabel("Time", fontsize=12, color="#444444", labelpad=10)
+    ax.tick_params(axis='both', colors="#555555", labelsize=10)
+    ax.grid(axis="x", color="white", linestyle="-", linewidth=1)
 
-# def pred_Winner(df_original, top5):
-#     summary = top5_filtered(df_original, top5)
+    # Legenda
+    ax.legend(frameon=False, fontsize=10, loc="lower right")
 
-#     summary['Jogos'] = 14
+    plt.tight_layout()
+    os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
+    fig.savefig(output_path, dpi=300, facecolor=fig.get_facecolor())
+    plt.close(fig)
 
-#     summary['MediaPontos'] = summary['PontosTotal'] / summary['Jogos']
+    print(f"✅ Previsão salva como '{output_path}'")
 
-#     summary['PontosPrevistos'] = summary['MediaPontos'] * 38
 
-#     summary['MediaPontos'] = summary['MediaPontos'].round(2).astype(float)
-#     summary['PontosPrevistos'] = summary['PontosPrevistos'].round().astype(int)
-
-#     LIMIT_WINNER = 79
-
-#     summary['ProbabilidadeCampeao'] = np.where(
-#         summary['PontosPrevistos'] >= LIMIT_WINNER, 'Alta',
-#         np.where(summary['PontosPrevistos'] >= 70, 'Média', 'Baixa')
-#     )
-
-#     return summary[['Time', 'PontosTotal', 'MediaPontos', 'PontosPrevistos', 'ProbabilidadeCampeao']]
-
-# # def plot_previsao(table, limiar_campeao=75, jogos=14, total_rodadas=38, output_path="img/previsao_pontuacao.png"):
-# #     """
-# #     Plota a previsão de pontuação final para o Brasileirão 2024.
-
-# #     Parâmetros:
-# #     - table: DataFrame com colunas ['Time', 'PontosPrevistos', 'MediaPontos']
-# #     - limiar_campeao: pontos mínimos para alta probabilidade de título
-# #     - jogos: número de rodadas já disputadas
-# #     - total_rodadas: total de rodadas no campeonato
-# #     - output_path: caminho para salvar o gráfico
-# #     """
-# #     # Ordena para barras horizontais de baixo (menores) para cima (maiores)
-# #     table = table.sort_values("PontosPrevistos", ascending=True)
-
-# #     # Normaliza cores entre min e máx previstos
-# #     vals = table["PontosPrevistos"]
-# #     norm = plt.Normalize(vals.min(), vals.max())
-# #     cmap = plt.cm.get_cmap("viridis")
-# #     colors = cmap(norm(vals))
-
-# #     # Cria figura
-# #     fig, ax = plt.subplots(figsize=(10, 6), facecolor="#f0f0f0")
-# #     ax.set_facecolor("#f0f0f0")
-
-# #     # Barras horizontais
-# #     bars = ax.barh(table["Time"], table["PontosPrevistos"], color=colors, edgecolor="#ffffff", height=0.6)
-
-# #     # Linha de limiar de campeão
-# #     ax.axvline(limiar_campeao, color="crimson", linestyle="--", linewidth=2,
-# #                label=f"Limiar Campeão: {limiar_campeao} pts")
-
-# #     # Anotações: pontos e média
-# #     for bar, m in zip(bars, table["MediaPontos"]):
-# #         x = bar.get_width()
-# #         y = bar.get_y() + bar.get_height()/2
-# #         ax.text(x + 0.5, y,
-# #                 f"{int(x)} pts\nMédia/jogo: {m:.2f}",
-# #                 va="center", ha="left", fontsize=9, color="#222222")
-
-# #     # Títulos e rótulos
-# #     ax.set_title("🏆 Previsão de Pontos Finais – Brasileirão 2024", fontsize=16, color="#222222", pad=15)
-# #     ax.set_xlabel(f"Pontos Previstos (até {jogos}/{total_rodadas} rodadas)", fontsize=12, color="#444444", labelpad=10)
-# #     ax.set_ylabel("Time", fontsize=12, color="#444444", labelpad=10)
-# #     ax.tick_params(axis='both', colors="#555555", labelsize=10)
-# #     ax.grid(axis="x", color="white", linestyle="-", linewidth=1)
-
-# #     # Legenda
-# #     ax.legend(frameon=False, fontsize=10, loc="lower right")
-
-# #     plt.tight_layout()
-# #     os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
-# #     fig.savefig(output_path, dpi=300, facecolor=fig.get_facecolor())
-# #     plt.close(fig)
 # def plot_previsao_cores_times(table, limiar_campeao=75, jogos=14, total_rodadas=38, output_path="img/previsao_cores.png"):
 
 #     cores_times = {

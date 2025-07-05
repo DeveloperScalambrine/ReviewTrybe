@@ -164,3 +164,81 @@ def better_team(graph_func=None):
         graph_func(top5)
 
     return top5
+
+def top5_filtered(df_original, top5):
+    # Filtra somente os 5 melhores times
+    times_top5 = top5['Time'].tolist()
+
+    df = df_original.copy()
+    df['ROD_NUM'] = df['ROD'].str.extract(r'(\d+)').astype(int)
+    df = df[df['ROD_NUM'] <= 14].copy()
+    df['Gols_M'] = df['Gols_M'].astype(int)
+    df['Gols_V'] = df['Gols_V'].astype(int)
+
+    df['Mandante'] = df['TimeMandante'].str.strip() + ' ' + df['UF_M']
+    df['Visitante'] = df['TimeVisitante'].str.strip() + ' ' + df['UF_V']
+
+    # Mandantes
+    mandante = df[df['Mandante'].isin(times_top5)].copy()
+    mandante['Time'] = mandante['Mandante']
+    mandante['GolsFeitos'] = mandante['Gols_M']
+    mandante['Vitoria'] = (mandante['Gols_M'] > mandante['Gols_V']).astype(int)
+    mandante['Empate'] = (mandante['Gols_M'] == mandante['Gols_V']).astype(int)
+    mandante['Pontos'] = mandante['Vitoria'] * 3 + mandante['Empate'] * 1
+
+    # Visitantes
+    visitante = df[df['Visitante'].isin(times_top5)].copy()
+    visitante['Time'] = visitante['Visitante']
+    visitante['GolsFeitos'] = visitante['Gols_V']
+    visitante['Vitoria'] = (visitante['Gols_V'] > visitante['Gols_M']).astype(int)
+    visitante['Empate'] = (visitante['Gols_V'] == visitante['Gols_M']).astype(int)
+    visitante['Pontos'] = visitante['Vitoria'] * 3 + visitante['Empate'] * 1
+
+    # Agrupamento
+    resumo_mandante = mandante.groupby('Time').agg({
+        'GolsFeitos': 'sum',
+        'Pontos': 'sum'
+    }).rename(columns={
+        'GolsFeitos': 'GolsMandante',
+        'Pontos': 'PontosMandante'
+    })
+
+    resumo_visitante = visitante.groupby('Time').agg({
+        'GolsFeitos': 'sum',
+        'Pontos': 'sum'
+    }).rename(columns={
+        'GolsFeitos': 'GolsVisitante',
+        'Pontos': 'PontosVisitante'
+    })
+
+    # Junta as análises
+    analise_final = resumo_mandante.join(resumo_visitante, how='outer').fillna(0).astype(int)
+    analise_final['PontosTotal'] = analise_final['PontosMandante'] + analise_final['PontosVisitante']
+    analise_final = analise_final.reset_index()
+
+    return analise_final
+
+def pred_Winner():
+
+    df = analyze_Per_Team()
+    top5_df = better_team()
+    
+    summary = top5_filtered(df, top5_df)
+    
+    summary['Jogos'] = 14
+
+    summary['MediaPontos'] = summary['PontosTotal'] / summary['Jogos']
+
+    summary['PontosPrevistos'] = summary['MediaPontos'] * 38
+
+    summary['MediaPontos'] = summary['MediaPontos'].round(2).astype(float)
+    summary['PontosPrevistos'] = summary['PontosPrevistos'].round().astype(int)
+
+    LIMIT_WINNER = 79
+
+    summary['ProbabilidadeCampeao'] = np.where(
+        summary['PontosPrevistos'] >= LIMIT_WINNER, 'Alta',
+        np.where(summary['PontosPrevistos'] >= 70, 'Média', 'Baixa')
+    )
+
+    return summary[['Time', 'PontosTotal', 'MediaPontos', 'PontosPrevistos', 'ProbabilidadeCampeao']]

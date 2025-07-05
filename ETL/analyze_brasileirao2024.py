@@ -1,5 +1,5 @@
-from analyze import analyze_Gol_Per_Round, analyze_Per_Round, analyze_Per_Team, reading_tabs, better_team
-from graphs import graph_team_round_gol, graph_five_top, graph_better_team
+from analyze import analyze_Gol_Per_Round, analyze_Per_Round, analyze_Per_Team, reading_tabs, better_team, top5_filtered, pred_Winner
+from graphs import graph_team_round_gol, graph_five_top, graph_better_team, plot_previsao
 
 # from convert_file import extract_pdf_tables_to_excel
 # from graphs import better_team, top5_filtered, pred_Winner, plot_previsao_cores_times, graph_nome
@@ -29,7 +29,6 @@ from graphs import graph_team_round_gol, graph_five_top, graph_better_team
 # analyze_Per_Round(7)
 #-------------------------------------------------#
 
-
 ## Função que mostra os 5 melhores que terminaram 
 # reading_tabs(graph_five_top)
 ##------------------------------------------------
@@ -38,11 +37,10 @@ from graphs import graph_team_round_gol, graph_five_top, graph_better_team
 # better_team(graph_better_team)
 ##-------------------------------------------------
 
+#Função que gera um grafico com uma previsão do campeao!
+plot_previsao()
+##------------------------------------------------
 
-
-# # forecast = pred_Winner(df, top5_df)
-# # plot_previsao(forecast)
-# # Exemplo de uso em main
 
 #     # Ajuste o caminho conforme seu diretório de projeto
 # # plot_evolucao_top5(path_excel)
