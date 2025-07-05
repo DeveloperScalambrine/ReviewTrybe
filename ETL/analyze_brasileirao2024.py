@@ -39,6 +39,7 @@ from graphs import graph_team_round_gol, graph_five_top, graph_better_team
 ##-------------------------------------------------
 
 
+
 # # forecast = pred_Winner(df, top5_df)
 # # plot_previsao(forecast)
 # # Exemplo de uso em main
