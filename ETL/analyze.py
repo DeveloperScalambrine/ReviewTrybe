@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 paths = [
     'File/Brasileiro_2024.xlsx',
@@ -93,8 +94,9 @@ def analyze_Per_Round(round):
     df = analyze_Per_Team()
     df_filter_round = df[df['ROD_NUM'] == round]
 
-# Acessar uma aba específica por nome passa o nome da aba no segundo parametro
+# Para acessar uma aba específica por nome passa o nome da aba no segundo parametro
 def reading_tabs(graph_func=None):
+
     all_tabs = pd.read_excel(paths[1], sheet_name=None)
 
     df_rounds = all_tabs["Rodadas-2024"]
@@ -106,3 +108,59 @@ def reading_tabs(graph_func=None):
        graph_func(top_five)
 
     return top_five
+    
+def better_team(graph_func=None):
+    df = analyze_Per_Team()  
+    # Etapa de preparação
+    df['ROD_NUM'] = df['ROD'].str.extract(r'(\d+)').astype(int)
+    df = df[df['ROD_NUM'] <= 14].copy()
+    df['Gols_M'] = df['Gols_M'].astype(int)
+    df['Gols_V'] = df['Gols_V'].astype(int)
+
+    # Nome dos times
+    df['Mandante'] = df['TimeMandante'].str.strip() + ' ' + df['UF_M']
+    df['Visitante'] = df['TimeVisitante'].str.strip() + ' ' + df['UF_V']
+
+    # Mandantes
+    principal = df[['Mandante', 'Gols_M', 'Gols_V']].copy()
+    principal.columns = ['Time', 'GolsFeitos', 'GolsSofridos']
+    principal['Vitoria'] = (principal['GolsFeitos'] > principal['GolsSofridos']).astype(int)
+    principal['Empate'] = (principal['GolsFeitos'] == principal['GolsSofridos']).astype(int)
+    principal['PartidasMandante'] = 1
+    principal['PartidasVisitante'] = 0
+
+    # Visitantes
+    visitor = df[['Visitante', 'Gols_V', 'Gols_M']].copy()
+    visitor.columns = ['Time', 'GolsFeitos', 'GolsSofridos']
+    visitor['Vitoria'] = (visitor['GolsFeitos'] > visitor['GolsSofridos']).astype(int)
+    visitor['Empate'] = (visitor['GolsFeitos'] == visitor['GolsSofridos']).astype(int)
+    visitor['PartidasMandante'] = 0
+    visitor['PartidasVisitante'] = 1
+
+    # Junta tudo
+    df_total = pd.concat([principal, visitor])
+
+    # Agrupa por time
+    summary = df_total.groupby('Time').agg({
+        'GolsFeitos': 'sum',
+        'PartidasMandante': 'sum',
+        'PartidasVisitante': 'sum',
+        'Vitoria': 'sum',
+        'Empate': 'sum'
+    }).reset_index()
+
+    # Pontuação
+    summary['Pontos'] = (summary['Vitoria'] * 3) + (summary['Empate'] * 1)
+
+    # Ordena por pontos
+    top5 = summary.sort_values(by='Pontos', ascending=False).head(5)
+
+    # Converte colunas para inteiros
+    cols_int = ['GolsFeitos', 'PartidasMandante', 'PartidasVisitante', 'Vitoria', 'Empate', 'Pontos']
+    top5[cols_int] = top5[cols_int].astype(int)
+
+    # Gera gráfico se função for passada
+    if graph_func:
+        graph_func(top5)
+
+    return top5

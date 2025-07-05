@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import pandas as pd
 # from sklearn.linear_model import LinearRegression
 # import numpy as np
 
@@ -37,56 +38,22 @@ def graph_five_top(top_five):
     plt.savefig("img/Cinco primeiros.png", dpi=300)
     print("✅ Gráfico salvo em 'img/Cinco primeiros'")
 
-# def better_team(df):
-#     # Etapa de preparação
-#     df['ROD_NUM'] = df['ROD'].str.extract(r'(\d+)').astype(int)
-#     df = df[df['ROD_NUM'] <= 14].copy()
-#     df['Gols_M'] = df['Gols_M'].astype(int)
-#     df['Gols_V'] = df['Gols_V'].astype(int)
+def graph_better_team(top5):
+    plt.figure(figsize=(10, 6))
+    plt.barh(top5['Time'], top5['Pontos'], color='royalblue')
+    plt.xlabel("Total de Pontos")
+    plt.title("Top 5 Times com Mais Pontos até a 14ª Rodada")
+    plt.gca().invert_yaxis()  # Coloca o 1º no topo
 
-#     # Nome dos times
-#     df['Mandante'] = df['TimeMandante'].str.strip() + ' ' + df['UF_M']
-#     df['Visitante'] = df['TimeVisitante'].str.strip() + ' ' + df['UF_V']
+    # Adiciona os valores nas barras
+    for i, v in enumerate(top5['Pontos']):
+        plt.text(v + 0.5, i, str(v), va='center')
 
-#     # Mandantes
-#     mandante = df[['Mandante', 'Gols_M', 'Gols_V']].copy()
-#     mandante.columns = ['Time', 'GolsFeitos', 'GolsSofridos']
-#     mandante['Vitoria'] = (mandante['GolsFeitos'] > mandante['GolsSofridos']).astype(int)
-#     mandante['Empate'] = (mandante['GolsFeitos'] == mandante['GolsSofridos']).astype(int)
-#     mandante['PartidasMandante'] = 1
-#     mandante['PartidasVisitante'] = 0
-
-#     # Visitantes
-#     visitante = df[['Visitante', 'Gols_V', 'Gols_M']].copy()
-#     visitante.columns = ['Time', 'GolsFeitos', 'GolsSofridos']
-#     visitante['Vitoria'] = (visitante['GolsFeitos'] > visitante['GolsSofridos']).astype(int)
-#     visitante['Empate'] = (visitante['GolsFeitos'] == visitante['GolsSofridos']).astype(int)
-#     visitante['PartidasMandante'] = 0
-#     visitante['PartidasVisitante'] = 1
-
-#     # Junta tudo
-#     df_total = pd.concat([mandante, visitante])
-
-#     # Agrupa
-#     resumo = df_total.groupby('Time').agg({
-#         'GolsFeitos': 'sum',
-#         'PartidasMandante': 'sum',
-#         'PartidasVisitante': 'sum',
-#         'Vitoria': 'sum',
-#         'Empate': 'sum'
-#     }).reset_index()
-
-#     # Pontuação total
-#     resumo['Pontos'] = (resumo['Vitoria'] * 3) + (resumo['Empate'] * 1)
-
-#     # Ordena
-#     top5 = resumo.sort_values(by='Pontos', ascending=False).head(5)
-
-#     # Conversão para inteiros
-#     cols_int = ['GolsFeitos', 'PartidasMandante', 'PartidasVisitante', 'Vitoria', 'Empate', 'Pontos']
-#     top5[cols_int] = top5[cols_int].astype(int)
-
-#     return top5
+    # Salva o gráfico
+    path_graph = "img/5 melhores 14 Rodada.png"
+    plt.tight_layout()
+    plt.savefig(path_graph, dpi=300)
+    print(f"✅ Gráfico salvo em: {path_graph}")
 
 # def top5_filtered(df_original, top5):
 #     # Filtra somente os 5 melhores times

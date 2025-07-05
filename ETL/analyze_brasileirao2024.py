@@ -1,5 +1,5 @@
-from analyze import analyze_Gol_Per_Round, analyze_Per_Round, analyze_Per_Team, reading_tabs
-from graphs import graph_team_round_gol, graph_five_top
+from analyze import analyze_Gol_Per_Round, analyze_Per_Round, analyze_Per_Team, reading_tabs, better_team
+from graphs import graph_team_round_gol, graph_five_top, graph_better_team
 
 # from convert_file import extract_pdf_tables_to_excel
 # from graphs import better_team, top5_filtered, pred_Winner, plot_previsao_cores_times, graph_nome
@@ -29,8 +29,16 @@ from graphs import graph_team_round_gol, graph_five_top
 # analyze_Per_Round(7)
 #-------------------------------------------------#
 
-reading_tabs(graph_five_top)
-# # top5_df = better_team(df)
+
+## Função que mostra os 5 melhores que terminaram 
+# reading_tabs(graph_five_top)
+##------------------------------------------------
+
+## Função que traz os 5 primeiros até a 14 rodada
+# better_team(graph_better_team)
+##-------------------------------------------------
+
+
 # # forecast = pred_Winner(df, top5_df)
 # # plot_previsao(forecast)
 # # Exemplo de uso em main
