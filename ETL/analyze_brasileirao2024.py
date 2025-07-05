@@ -1,4 +1,4 @@
-from analyze import analyze_Gol_Per_Round, analyze_Per_Round, analyze_Per_Team
+from analyze import analyze_Gol_Per_Round, analyze_Per_Round, analyze_Per_Team, reading_tabs
 from graphs import graph_team_round_gol
 
 # from convert_file import extract_pdf_tables_to_excel
@@ -24,9 +24,12 @@ from graphs import graph_team_round_gol
 ## Chamando a função para analise de gols por rodada da equipe São Paulo, recebe como parametro uma função de grafico ##
 # analyze_Gol_Per_Round(graph_team_round_gol)
 ##--------------------------------------------------------------------------------------------------##
-analyze_Per_Round(38)
 
+## Chamando função para pesquisar por rodada especifica
+# analyze_Per_Round(7)
+#-------------------------------------------------#
 
+reading_tabs()
 # # all_able = pd.read_excel(path_excel, sheet_name=None)
 # df = pd.read_excel(path_excel, sheet_name="Rodadas-2024")
 # # df_classificacao = pd.read_excel(path_excel, sheet_name="Classificação")

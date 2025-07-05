@@ -1,6 +1,9 @@
 import pandas as pd
 
-path = 'File/Brasileiro_2024.xlsx'
+paths = [
+    'File/Brasileiro_2024.xlsx',
+    'File/Tables.xlsx'
+    ]
 
 def read(table, type_file):
    
@@ -23,7 +26,7 @@ def read(table, type_file):
     return df
 
 def analyze_Per_Team():
-    df = read(path, "excel")
+    df = read(paths[0], "excel")
     
     df['JOGO'] = df['JOGO'].astype(str)
     df[['TimeMandante', 'UF_M', 'Gols_M', 'Gols_V', 'TimeVisitante', 'UF_V']] = df['JOGO'].str.extract(
@@ -89,3 +92,13 @@ def analyze_Gol_Per_Round(graph_func=None):
 def analyze_Per_Round(round):
     df = analyze_Per_Team()
     df_filter_round = df[df['ROD_NUM'] == round]
+
+# Acessar uma aba específica por nome passa o nome da aba no segundo parametro
+def reading_tabs():
+    all_tabs = pd.read_excel(paths[1], sheet_name=None)
+
+    df_rounds = all_tabs["Rodadas-2024"]
+    df_classification = all_tabs["Classificação"]
+
+    print(df_rounds.head(5))
+    print(df_classification.head(5))
