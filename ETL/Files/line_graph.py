@@ -4,13 +4,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
-
 # Base: pasta onde o script está
 BASE_DIR = os.path.dirname(__file__)
-
 # Caminho para arquivos de entrada (Excel)
 INPUT_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "Created_File"))
-
 # Caminho para salvar imagens
 OUTPUT_IMG_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "img"))
 
@@ -94,7 +91,6 @@ def plot_evolucao_top5(filepath: str, sheet_name: str = "Rodadas-2024", limite_r
     plt.savefig(output_path, dpi=300, facecolor=plt.gcf().get_facecolor(), bbox_inches='tight', pad_inches=0.1)
     plt.close()
 
-
 def performance_analysis_use(general_performance):
     fig, ax = plt.subplots(figsize=(10, 6))
 
@@ -127,7 +123,6 @@ def performance_analysis_use(general_performance):
     plt.tight_layout()
     plt.savefig(os.path.join(OUTPUT_IMG_DIR, "Pontuacao.png"), dpi=300)
     print("✅ Gráfico salvo em 'img/Pontuacao'")
-
 
 def analysis_by_goal(gols):
     ig, ax = plt.subplots(figsize=(12, 8))
@@ -168,13 +163,35 @@ def analysis_by_goal(gols):
 
 def analysis_performance_home(points_general):
     corr1 = points_general['VitoriasEmCasa'].corr(points_general['Gols Sofridos Em Casa'])
-    plt.scatter(points_general['VitoriasEmCasa'], points_general['Gols Sofridos Em Casa'])
-    plt.title(f'VitoriasEmCasa vs. Gols Sofridos Em Casa (correlação: {corr1:.2f})')
-    plt.xlabel('VitoriasEmCasa')
-    plt.ylabel('Gols Sofridos Em Casa')
+    fig, ax = plt.subplots()
+
+    # Scatter plot original
+    ax.scatter(points_general['VitoriasEmCasa'], points_general['Gols Sofridos Em Casa'])
+    ax.set_title(f'Vitorias Em Casa vs. Gols Sofridos Em Casa')
+    ax.set_xlabel('Vitorias Em Casa')
+    ax.set_ylabel('Gols Sofridos Em Casa')
+
+    # Eixo Y direito com nomes dos times
+    ax2 = ax.twinx()
+    ax2.set_ylim(ax.get_ylim())  # Garante que os limites fiquem iguais
+    ax2.set_yticks(points_general['Gols Sofridos Em Casa'])
+    ax2.set_yticklabels(points_general['Nome dos Time'])  # Substitua por points_general['Equipe'] se for o nome da coluna
+
+    # Remove a marcação do eixo da direita para não ficar poluído
+    ax2.tick_params(axis='y', which='both', length=0)
+
+    plt.tight_layout()
     plt.savefig(os.path.join(OUTPUT_IMG_DIR, "Desempenho em casa.png"), dpi=300)
-    plt.close() 
+    plt.close()
     print("✅ Gráfico salvo em 'img/Analise Desempenho em Casa'")
+    # corr1 = points_general['VitoriasEmCasa'].corr(points_general['Gols Sofridos Em Casa'])
+    # plt.scatter(points_general['VitoriasEmCasa'], points_general['Gols Sofridos Em Casa'])
+    # plt.title(f'VitoriasEmCasa vs. Gols Sofridos Em Casa (correlação: {corr1:.2f})')
+    # plt.xlabel('VitoriasEmCasa')
+    # plt.ylabel('Gols Sofridos Em Casa')
+    # plt.savefig(os.path.join(OUTPUT_IMG_DIR, "Desempenho em casa.png"), dpi=300)
+    # plt.close() 
+    # print("✅ Gráfico salvo em 'img/Analise Desempenho em Casa'")
 
 def analysis_win_out(points_general):
     corr2 = points_general['VitoriasFora'].corr(points_general['Gols Fora'])

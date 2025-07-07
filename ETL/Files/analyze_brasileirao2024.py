@@ -44,7 +44,7 @@ from line_graph import (
     analysis_performance_home,
     analysis_win_out,
     point_home_out,
-    plot_with_regression,
+    plot_with_regression
 )
 #---------------------------------------------------------------#
 # 💼 ETAPA OPCIONAL: Converter PDF para Excel
@@ -77,7 +77,7 @@ def main():
     # plot_previsao()
     # plot_evolucao_top5(paths[1])
     # # analyze_Per_Round(7)
-    perfor_inside_outside(plot_with_regression)
+    perfor_inside_outside(analysis_performance_home)
     # records_general()
 
     print("✅ Análise finalizada com sucesso!")
