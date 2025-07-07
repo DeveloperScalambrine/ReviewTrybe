@@ -5,16 +5,18 @@ Este projeto realiza uma análise completa da Tabela do Campeonato Brasileiro S�
 ---
 
 ## 📌 Objetivo
-
 O principal objetivo é aplicar técnicas de engenharia e análise de dados para extrair, tratar e interpretar informações da tabela oficial do Brasileirão 2024, respondendo perguntas como:
 
 - Quais times estão se destacando?
-  - Vide análise até a 14ª rodada, identificando os 5 primeiros times, bem como a probabilidade de se tornarem campeões, usando pontos, gols e partidas como visitante/mandante.
-  - A análise será aprimorada com modelos de predição para verificar a acurácia das projeções.
   - **Resultados apresentados em um arquivo PPT (PowerPoint) de análise.**
-  -  - **Link na Nuvem:** [Apresentação Análise Brasileiro 2024](https://docs.google.com/presentation/d/1_pESzz4cRUk76GZ4W93ttyQG-awJwW9qau35xQX5Kgk/edit?slide=id.p#slide=id.p)
-    - **Caminho Local:** `/home/carlos/ReviewTrybe/ETL/Apresentação/Analise Brasileiro 2024.pptx`
+  -  - **Links da apresentação respondendo a questão acima:**
+     - [Evolução das Equipes até a decima quarta rodada](https://docs.google.com/presentation/d/1_pESzz4cRUk76GZ4W93ttyQG-awJwW9qau35xQX5Kgk/edit?slide=id.g36d213a271f_0_5#slide=id.g36d213a271f_0_5)
+     - [Insights](https://docs.google.com/presentation/d/1_pESzz4cRUk76GZ4W93ttyQG-awJwW9qau35xQX5Kgk/edit?slide=id.g36d213a271f_0_14#slide=id.g36d213a271f_0_14)
 - Como está o desempenho dentro e fora de casa?
+- - **Links da apresentação respondendo a questão acima**
+  - [Desempenho geral dos Times no Campeonato em casa e fora](https://docs.google.com/presentation/d/1_pESzz4cRUk76GZ4W93ttyQG-awJwW9qau35xQX5Kgk/edit?slide=id.g362e55f8928_0_0#slide=id.g362e55f8928_0_0)
+  - [Desempenho de gols dos Times](https://docs.google.com/presentation/d/1_pESzz4cRUk76GZ4W93ttyQG-awJwW9qau35xQX5Kgk/edit?slide=id.g362e55f8928_0_15#slide=id.g362e55f8928_0_15)
+  - [Desempenho em casa e gols sofridos](https://docs.google.com/presentation/d/1_pESzz4cRUk76GZ4W93ttyQG-awJwW9qau35xQX5Kgk/edit?slide=id.g362e55f8928_0_31#slide=id.g362e55f8928_0_31)
 - Quais rodadas foram mais produtivas para determinado time?
 - Como construir uma classificação automática baseada nos resultados?
 
