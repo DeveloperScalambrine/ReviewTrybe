@@ -1,7 +1,9 @@
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 import os
+
 
 # Base: pasta onde o script está
 BASE_DIR = os.path.dirname(__file__)
@@ -91,3 +93,152 @@ def plot_evolucao_top5(filepath: str, sheet_name: str = "Rodadas-2024", limite_r
     plt.tight_layout()
     plt.savefig(output_path, dpi=300, facecolor=plt.gcf().get_facecolor(), bbox_inches='tight', pad_inches=0.1)
     plt.close()
+
+
+def performance_analysis_use(general_performance):
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    # Largura das barras
+    bar_width = 0.2
+
+    # Posições das barras
+    r1 = range(len(general_performance))
+    r2 = [x + bar_width for x in r1]
+    r3 = [x + bar_width for x in r2]
+
+    # Criar barras
+    ax.bar(r1, general_performance['PontosEmCasa'], color='blue', width=bar_width, edgecolor='grey', label='Pontos em Casa')
+    ax.bar(r2, general_performance['PontosFora'], color='orange', width=bar_width, edgecolor='grey', label='Pontos Fora')
+    ax.bar(r3, general_performance['PontosTotais'], color='green', width=bar_width, edgecolor='grey', label='Pontos Totais')
+
+    # Adicionar labels
+    ax.set_xlabel('Times')
+    ax.set_ylabel('Pontos')
+    ax.set_title('Desempenho Geral dos Times\nPontos ganhos em jogos', fontsize=14)
+    ax.set_xticks([r + bar_width for r in range(len(general_performance))])
+    ax.set_xticklabels(general_performance['Nome dos Time'])
+
+    # Adicionar legenda e grid
+    ax.legend()
+    ax.grid(axis='y')
+
+    # Exibir gráfico
+    plt.xticks(rotation=45, ha='right')
+    plt.tight_layout()
+    plt.savefig(os.path.join(OUTPUT_IMG_DIR, "Pontuacao.png"), dpi=300)
+    print("✅ Gráfico salvo em 'img/Pontuacao'")
+
+
+def analysis_by_goal(gols):
+    ig, ax = plt.subplots(figsize=(12, 8))
+
+# Largura das barras
+    bar_width = 0.2
+
+    # Posições das barras
+    r1 = range(len(gols))
+    r2 = [x + bar_width for x in r1]
+    r3 = [x + bar_width for x in r2]
+    r4 = [x + bar_width for x in r3]
+
+    # Criar as barras
+    ax.bar(r1, gols['Gols Em Casa'], color='blue', width=bar_width, edgecolor='grey', label='Gols Em Casa')
+    ax.bar(r2, gols['Gols Fora'], color='orange', width=bar_width, edgecolor='grey', label='Gols Fora')
+    ax.bar(r3, gols['Gols Sofridos Em Casa'], color='green', width=bar_width, edgecolor='grey', label='Gols Sofridos Em Casa')
+    ax.bar(r4, gols['Gols Sofridos Fora'], color='red', width=bar_width, edgecolor='grey', label='Gols Sofridos Fora')
+
+    # Adicionando rótulos e títulos
+    ax.set_xlabel('Times')
+    ax.set_ylabel('Gols')
+    ax.set_title('Desempenho de Gols dos Times')
+    ax.set_xticks([r + 1.5 * bar_width for r in range(len(gols))])
+    ax.set_xticklabels(gols['Time'])
+
+    # Adicionando legenda e grid
+    ax.legend()
+    ax.grid(axis='y')
+
+    # Mostrar gráfico
+    plt.xticks(rotation=45, ha='right')
+    plt.tight_layout()
+
+    gols.to_excel("/home/carlos/ReviewTrybe/ETL/Created_File/Pontuacao Gol.xlsx", index=False)
+    plt.savefig(os.path.join(OUTPUT_IMG_DIR, "Pontuacao Gol.png"), dpi=300)
+    print("✅ Gráfico salvo em 'img/Pontuacao Gol'")
+
+def analysis_performance_home(points_general):
+    corr1 = points_general['VitoriasEmCasa'].corr(points_general['Gols Sofridos Em Casa'])
+    plt.scatter(points_general['VitoriasEmCasa'], points_general['Gols Sofridos Em Casa'])
+    plt.title(f'VitoriasEmCasa vs. Gols Sofridos Em Casa (correlação: {corr1:.2f})')
+    plt.xlabel('VitoriasEmCasa')
+    plt.ylabel('Gols Sofridos Em Casa')
+    plt.savefig(os.path.join(OUTPUT_IMG_DIR, "Desempenho em casa.png"), dpi=300)
+    plt.close() 
+    print("✅ Gráfico salvo em 'img/Analise Desempenho em Casa'")
+
+def analysis_win_out(points_general):
+    corr2 = points_general['VitoriasFora'].corr(points_general['Gols Fora'])
+    plt.scatter(points_general['VitoriasFora'], points_general['Gols Fora'])
+    plt.title(f'VitoriasFora vs. Gols Fora (correlação: {corr2:.2f})')
+    plt.xlabel('Vitorias Fora')
+    plt.ylabel('Gols Fora')
+    plt.savefig(os.path.join(OUTPUT_IMG_DIR, "Desempenho fora.png"), dpi=300)
+    plt.close() 
+    print("✅ Gráfico salvo em 'img/Analise Desempenho fora'")
+
+def point_home_out(points_general):
+  teams = points_general['Nome dos Time']
+  vitorias_em_casa = points_general['VitoriasEmCasa']
+  vitorias_fora = points_general['VitoriasFora']
+    
+    # Criando array de índices para os times
+  teams_array = np.arange(len(teams))
+    
+    # Configurações do gráfico
+  fig, ax = plt.subplots()
+  bar_width = 0.35
+    
+  ax.bar(teams_array - bar_width/2, vitorias_em_casa, bar_width, label='Vitórias Em Casa')
+  ax.bar(teams_array + bar_width/2, vitorias_fora, bar_width, label='Vitórias Fora')
+    
+  ax.set_xlabel('Times')
+  ax.set_ylabel('Vitórias')
+  ax.set_title('Comparação de Vitórias em Casa/Fora')
+  ax.set_xticks(teams_array)
+  ax.set_xticklabels(teams, rotation=45, ha='right')
+  ax.legend()
+    
+    # Ajustando layout e salvando
+  plt.tight_layout()
+  plt.savefig(os.path.join(OUTPUT_IMG_DIR, "Pontos_em_casa_fora.png"), dpi=300)
+  plt.close()
+    
+  print("✅ Gráfico salvo em 'img/Pontos_em_casa_fora'")
+
+def plot_with_regression(points_general):
+    # Extraindo dados
+    vitorias_em_casa = points_general['VitoriasEmCasa']
+    gols_sofridos_em_casa = points_general['Gols Sofridos Em Casa']
+    
+    # Criando o gráfico de dispersão
+    plt.scatter(vitorias_em_casa, gols_sofridos_em_casa, label='Dados')
+    
+    # Calculando a linha de regressão
+    coef = np.polyfit(vitorias_em_casa, gols_sofridos_em_casa, 1)
+    poly1d_fn = np.poly1d(coef)
+    
+    # Desenhando a linha de regressão
+    plt.plot(vitorias_em_casa, poly1d_fn(vitorias_em_casa), color='red', label='Linha de Regressão')
+    
+    # Configurações do gráfico
+    plt.xlabel('Vitórias Em Casa')
+    plt.ylabel('Gols Sofridos Em Casa')
+    plt.title('Vitórias Em Casa vs. Gols Sofridos Em Casa')
+    plt.legend()
+    
+    # Ajustando layout e salvando
+    plt.tight_layout()
+    plt.savefig(os.path.join(OUTPUT_IMG_DIR, "Regressao_vitorias_gols.png"), dpi=300)
+    plt.close()
+    
+    print("✅ Gráfico com regressão salvo em 'img/Regressao_vitorias_gols'")

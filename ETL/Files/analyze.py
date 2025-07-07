@@ -15,7 +15,10 @@ OUTPUT_IMG_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "img"))
 
 paths = [
     os.path.join(INPUT_DIR, 'Brasileiro_2024.xlsx'),
-    os.path.join(INPUT_DIR, 'Tables.xlsx')
+    os.path.join(INPUT_DIR, 'Tables.xlsx'),
+    os.path.join(INPUT_DIR, 'Records_Points.xlsx'),
+    os.path.join(INPUT_DIR, 'Points.xlsx'),
+    
 ]
 
 def read(table, type_file):
@@ -110,17 +113,19 @@ def analyze_Per_Round(round):
 def reading_tabs(graph_func=None):
 
     all_tabs = pd.read_excel(paths[1], sheet_name=None)
-
-    df_rounds = all_tabs["Rodadas-2024"]
-    df_classification = all_tabs["Classificação"]
+    
+    points_general = all_tabs.get("Points")
+    points = all_tabs.get("Records_Points")
+    df_rounds = all_tabs.get("Rodadas-2024")
+    df_classification = all_tabs.get("Classificação")
     df_classification.columns = df_classification.columns.str.strip()
     top_five = df_classification.sort_values(by="Pontos", ascending=False).head(5)
     
     if graph_func:
        graph_func(top_five)
 
-    return top_five
-    
+    return  df_rounds, df_classification, points, points_general
+
 def better_team(graph_func=None):
     df = analyze_Per_Team()  
     # Etapa de preparação
@@ -319,3 +324,145 @@ def plot_previsao_cores_times(table, limiar_campeao=75, jogos=14, total_rodadas=
     # Salva a figura usando output_path
     fig.savefig(output_path, dpi=300, facecolor=fig.get_facecolor())
     plt.close(fig)
+
+def perfor_inside_outside(graph_func=None):
+    df, df_classification, points, points_general = reading_tabs()
+    # performance_analysis_use = points[['Nome dos Time', 'VitoriasEmCasa', 'VitoriasFora', 'PontosEmCasa', 'PontosFora', 'PontosTotais']]
+    # if graph_func:
+    #   graph_func(performance_analysis_use)
+    # return performance_analysis_use
+    if graph_func:
+        graph_func(points_general)
+    return points_general
+    
+    # df['TimeMandante'] = df['TimeMandante'] + " (" + df['UF_M'] + ")"
+    # df['TimeVisitante'] = df['TimeVisitante'] + " (" + df['UF_V'] + ")"
+
+    # goal_of_home = df.groupby('TimeMandante')['Gols_M'].sum().reset_index()
+    # goal_of_home.columns = ['Time', 'Gols Em Casa']
+
+    # goal_out = df.groupby('TimeVisitante')['Gols_V'].sum().reset_index()
+    # goal_out.columns = ['Time', 'Gols Fora']
+
+    # goal_conceded_home = df.groupby('TimeMandante')['Gols_V'].sum().reset_index()
+    # goal_conceded_home.columns = ['Time', 'Gols Sofridos Em Casa']
+
+    # gols_sofridos_fora = df.groupby('TimeVisitante')['Gols_M'].sum().reset_index()
+    # gols_sofridos_fora.columns = ['Time', 'Gols Sofridos Fora']
+
+    # gols = pd.merge(goal_of_home, goal_out, on='Time', how='outer')
+    # gols = pd.merge(gols, goal_conceded_home, on='Time', how='outer')
+    # gols = pd.merge(gols, gols_sofridos_fora, on='Time', how='outer')
+
+    # gols = gols.fillna(0)
+
+    # if graph_func:
+    #     graph_func(gols)
+    
+    # return gols
+    
+    # visao estatistica das colunas 
+    # print(df.describe())
+
+
+    #somar e tirar a media dos pontos em casa e fora
+    # soma_casa = points['PontosEmCasa'].sum()
+    # media_casa = points['PontosEmCasa'].mean()
+
+    # soma_fora = points['PontosFora'].sum()
+    # media_fora = points['PontosFora'].mean()
+
+    
+    #Analisar o número de vitórias, derrotas e empates em casa e fora:
+    # vitorias_casa = points['VitoriasEmCasa']
+    # vitorias_fora = points['VitoriasFora'].sum()
+
+    # derrotas_casa = points['DerrotasEmCasa'].sum()
+    # derrotas_fora = points['DerrotasFora'].sum()
+
+    # empates_casa = points['EmpatesEmCasa'].sum()
+    # empates_fora = points['EmpatesFora'].sum()
+
+    # times_com_vitoria_em_casa =  points['Nome dos Time']
+    # times_com_vitoria_em_casa = vitorias_casa
+    
+    # print("Vitórias em Casa:", vitorias_casa, "Vitórias Fora:", vitorias_fora)
+    # print("Derrotas em Casa:", derrotas_casa, "Derrotas Fora:", derrotas_fora)
+    # print("Empates em Casa:", empates_casa, "Empates Fora:", empates_fora)    
+    # print(f"Soma Pontos em Casa: {soma_casa}, Média Pontos em Casa: {media_casa}")
+    # print(f"Soma Pontos Fora: {soma_fora}, Média Pontos Fora: {media_fora}")
+    
+    #ANALISE FINAL SOBRE DESEMPENHO EM CASA USANDO COMO PARAMETROS
+    # PONTOS EM CASA E PONTOS FORA 
+  
+   # Melhor desempenho em casa
+#     melhor_casa = points.loc[points['PontosEmCasa'].idxmax()]
+#     nome_melhor_casa = melhor_casa['Nome dos Time']
+#     pontos_melhor_casa = melhor_casa['PontosEmCasa']
+
+#     # Melhor desempenho fora
+#     melhor_fora = points.loc[points['PontosFora'].idxmax()]
+#     nome_melhor_fora = melhor_fora['Nome dos Time']
+#     pontos_melhor_fora = melhor_fora['PontosFora']
+
+#     # Pior desempenho em casa
+#     pior_casa = points.loc[points['PontosEmCasa'].idxmin()]
+#     nome_pior_casa = pior_casa['Nome dos Time']
+#     pontos_pior_casa = pior_casa['PontosEmCasa']
+
+#     # Pior desempenho fora
+#     pior_fora = points.loc[points['PontosFora'].idxmin()]
+#     nome_pior_fora = pior_fora['Nome dos Time']
+#     pontos_pior_fora = pior_fora['PontosFora']
+
+#     analise_desempenho = f"""
+# Melhor Time em Casa: {nome_melhor_casa} com {pontos_melhor_casa} pontos
+# Melhor Time Fora: {nome_melhor_fora} com {pontos_melhor_fora} pontos
+# Pior Time em Casa: {nome_pior_casa} com {pontos_pior_casa} pontos
+# Pior Time Fora: {nome_pior_fora} com {pontos_pior_fora} pontos
+# """
+#     return analise_desempenho
+
+    # # Cálculo do total de gols como mandante incluindo UF
+    # gols_mandante = df.groupby(['TimeMandante', 'UF_M'], as_index=False).agg(
+    #     Gols_M=('Gols_M', 'sum')
+    # )
+
+    # # Cálculo do total de gols como visitante incluindo UF
+    # gols_visitante = df.groupby(['TimeVisitante', 'UF_V'], as_index=False).agg(
+    #     Gols_V=('Gols_V', 'sum')
+    # )
+
+    # # Calcula a média de gols como mandante
+    # media_gols_mandante = gols_mandante['Gols_M'].mean()
+
+    # # Calcula a média de gols como visitante
+    # media_gols_visitante = gols_visitante['Gols_V'].mean()
+
+    # # Calcula média total
+    # media_total_gols = (gols_mandante['Gols_M'].sum() + gols_visitante['Gols_V'].sum()) / (len(gols_mandante) + len(gols_visitante))
+
+    # # Encontra menor e maior total de gols como mandante
+    # menor_gols_mandante = gols_mandante.loc[gols_mandante['Gols_M'].idxmin()]
+    # maior_gols_mandante = gols_mandante.loc[gols_mandante['Gols_M'].idxmax()]
+
+    # # Encontra menor e maior total de gols como visitante
+    # menor_gols_visitante = gols_visitante.loc[gols_visitante['Gols_V'].idxmin()]
+    # maior_gols_visitante = gols_visitante.loc[gols_visitante['Gols_V'].idxmax()]
+
+    # # Formatar a análise em uma string
+    # analise_aproveitamento = f"""
+    # Menor aproveitamento como mandante: {menor_gols_mandante['TimeMandante']} ({menor_gols_mandante['UF_M']}) com {menor_gols_mandante['Gols_M']} gols
+    # Maior aproveitamento como mandante: {maior_gols_mandante['TimeMandante']} ({maior_gols_mandante['UF_M']}) com {maior_gols_mandante['Gols_M']} gols
+    # Média de gols como mandante: {media_gols_mandante:.2f} gols
+
+    # Menor aproveitamento como visitante: {menor_gols_visitante['TimeVisitante']} ({menor_gols_visitante['UF_V']}) com {menor_gols_visitante['Gols_V']} gols
+    # Maior aproveitamento como visitante: {maior_gols_visitante['TimeVisitante']} ({maior_gols_visitante['UF_V']}) com {maior_gols_visitante['Gols_V']} gols
+    # Média de gols como visitante: {media_gols_visitante:.2f} gols
+
+    # Média total de gols: {media_total_gols:.2f} gols
+    # """
+
+# def records_general(graph_func=None):
+#     points_general = perfor_inside_outside()
+#     print(points_general.column)
