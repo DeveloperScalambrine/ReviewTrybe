@@ -113,18 +113,17 @@ def analyze_Per_Round(round):
 def reading_tabs(graph_func=None):
 
     all_tabs = pd.read_excel(paths[1], sheet_name=None)
-    
-    points_general = all_tabs.get("Points")
-    points = all_tabs.get("Records_Points")
-    df_rounds = all_tabs.get("Rodadas-2024")
-    df_classification = all_tabs.get("Classificação")
-    df_classification.columns = df_classification.columns.str.strip()
-    top_five = df_classification.sort_values(by="Pontos", ascending=False).head(5)
-    
     if graph_func:
-       graph_func(top_five)
+       graph_func(all_tabs)
 
-    return  df_rounds, df_classification, points, points_general
+    return  all_tabs
+    
+    # points_general = all_tabs.get("Points")
+    # points = all_tabs.get("Records_Points")
+    # df_rounds = all_tabs.get("Rodadas-2024")
+    # df_classification = all_tabs.get("Classificação")
+    # df_classification.columns = df_classification.columns.str.strip()
+    # top_five = df_classification.sort_values(by="Pontos", ascending=False).head(5)
 
 def better_team(graph_func=None):
     df = analyze_Per_Team()  
@@ -325,16 +324,26 @@ def plot_previsao_cores_times(table, limiar_campeao=75, jogos=14, total_rodadas=
     fig.savefig(output_path, dpi=300, facecolor=fig.get_facecolor())
     plt.close(fig)
 
+
 def perfor_inside_outside(graph_func=None):
-    df, df_classification, points, points_general = reading_tabs()
+    all_tabs = reading_tabs()
+    points_general = all_tabs['Points']
+    points_general_home = all_tabs['Points']
+    points_general_home_out = all_tabs['Points']
+    plot_regression = all_tabs['Points']
+    points_general_home = all_tabs['Points']
+    if graph_func:
+       graph_func(points_general)    
+    return points_general, points_general_home, points_general_home_out, plot_regression
+
+    #UMA ANALISE
     # performance_analysis_use = points[['Nome dos Time', 'VitoriasEmCasa', 'VitoriasFora', 'PontosEmCasa', 'PontosFora', 'PontosTotais']]
     # if graph_func:
     #   graph_func(performance_analysis_use)
     # return performance_analysis_use
-    if graph_func:
-        graph_func(points_general)
-    return points_general
     
+
+    #OUTRA ANALISE
     # df['TimeMandante'] = df['TimeMandante'] + " (" + df['UF_M'] + ")"
     # df['TimeVisitante'] = df['TimeVisitante'] + " (" + df['UF_V'] + ")"
 
@@ -463,6 +472,3 @@ def perfor_inside_outside(graph_func=None):
     # Média total de gols: {media_total_gols:.2f} gols
     # """
 
-# def records_general(graph_func=None):
-#     points_general = perfor_inside_outside()
-#     print(points_general.column)

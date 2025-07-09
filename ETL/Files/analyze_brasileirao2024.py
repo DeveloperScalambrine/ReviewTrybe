@@ -77,8 +77,10 @@ def main():
     # plot_previsao()
     # plot_evolucao_top5(paths[1])
     # # analyze_Per_Round(7)
-    perfor_inside_outside(analysis_performance_home)
-    # records_general()
+    # perfor_inside_outside(analysis_performance_home)
+    # perfor_inside_outside(analysis_win_out)
+    # perfor_inside_outside(point_home_out)
+    # perfor_inside_outside(plot_with_regression)
 
     print("✅ Análise finalizada com sucesso!")
 
