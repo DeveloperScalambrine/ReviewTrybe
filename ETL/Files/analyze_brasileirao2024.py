@@ -24,6 +24,7 @@ from analyze import (
     reading_tabs,
     analyze_Per_Round,
     perfor_inside_outside,
+    round_favority
     # records_general
     # extract_pdf_tables_to_excel  # Ative se for usar conversão de PDF
 )
@@ -33,7 +34,8 @@ from graphs import (
     graph_team_round_gol,
     graph_five_top,
     graph_better_team,
-    plot_previsao
+    plot_previsao,
+    graph_better_round
 )
 
 # line_graph.py → Gráfico de linha de evolução
@@ -81,6 +83,7 @@ def main():
     # perfor_inside_outside(analysis_win_out)
     # perfor_inside_outside(point_home_out)
     # perfor_inside_outside(plot_with_regression)
+    round_favority(graph_better_round)
 
     print("✅ Análise finalizada com sucesso!")
 

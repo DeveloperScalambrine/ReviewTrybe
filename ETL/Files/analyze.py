@@ -324,17 +324,74 @@ def plot_previsao_cores_times(table, limiar_campeao=75, jogos=14, total_rodadas=
     fig.savefig(output_path, dpi=300, facecolor=fig.get_facecolor())
     plt.close(fig)
 
-
 def perfor_inside_outside(graph_func=None):
     all_tabs = reading_tabs()
+    # points_general = all_tabs['Points']
+    # points_general_home = all_tabs['Points']
+    # points_general_home_out = all_tabs['Points']
+    # plot_regression = all_tabs['Points']
+    round = all_tabs['Rodadas-2024']
     points_general = all_tabs['Points']
-    points_general_home = all_tabs['Points']
-    points_general_home_out = all_tabs['Points']
-    plot_regression = all_tabs['Points']
-    points_general_home = all_tabs['Points']
     if graph_func:
-       graph_func(points_general)    
-    return points_general, points_general_home, points_general_home_out, plot_regression
+       graph_func(round, points_general)    
+    return round
+
+def round_favority(graph_func=None):
+    df_round = perfor_inside_outside()
+
+    dict = {
+    ('Atlético', 'MG'): 'Atlético-MG',
+    ('Atlético', 'GO'): 'Atlético-GO',
+    ('Athletico', 'PR'): 'Athletico-PR',
+}
+
+    df_round['TimeMandante'] = df_round.apply(
+    lambda row: dict.get((row['TimeMandante'], row['UF_M']), row['TimeMandante']),
+    axis=1
+)
+
+    df_round['TimeVisitante'] = df_round.apply(
+    lambda row: dict.get((row['TimeVisitante'], row['UF_V']), row['TimeVisitante']),
+    axis=1
+)
+
+    home = df_round[['ROD_NUM', 'TimeMandante', 'Gols_M', 'Gols_V']].copy()
+    home.columns = ['Rodada', 'Time', 'Gols Feitos', 'Gols Sofridos']
+    home['Pontos'] = home.apply(
+        lambda x: 3 if x['Gols Feitos'] > x['Gols Sofridos'] else 0,
+        axis=1
+    )
+    home['Local'] = 'Casa'
+
+    visitor = df_round[['ROD_NUM', 'TimeVisitante', 'Gols_V', 'Gols_M']].copy()
+    visitor.columns = ['Rodada', 'Time', 'Gols Feitos', 'Gols Sofridos']
+    visitor['Pontos'] =visitor.apply(
+        lambda x: 3 if x['Gols Feitos'] > x['Gols Sofridos'] else 0,
+        axis=1
+    )
+    visitor['Local'] = 'Fora'
+
+    all_games = pd.concat([home,visitor], ignore_index=True)
+
+    all_games['Saldo de Gols'] = all_games['Gols Feitos'] - all_games['Gols Sofridos']
+
+    vitorias = all_games[
+        (all_games['Pontos'] == 3) &
+        (all_games['Saldo de Gols'] > 0)
+    ]
+
+    better_round = (
+        vitorias.sort_values(['Time', 'Saldo de Gols'], ascending=[True, False])
+        .drop_duplicates(subset='Time')
+        .reset_index(drop=True)
+    )
+    if graph_func:
+       graph_func(better_round)
+
+    return better_round
+
+
+
 
     #UMA ANALISE
     # performance_analysis_use = points[['Nome dos Time', 'VitoriasEmCasa', 'VitoriasFora', 'PontosEmCasa', 'PontosFora', 'PontosTotais']]

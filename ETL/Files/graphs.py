@@ -3,6 +3,7 @@ import pandas as pd
 import os
 from analyze import pred_Winner
 import os
+from analyze import round_favority
 
 # Base: pasta onde o script está
 BASE_DIR = os.path.dirname(__file__)
@@ -122,3 +123,38 @@ def plot_previsao(limiar_campeao=75, jogos=14, total_rodadas=38, output_path="/h
     plt.close(fig)
 
     print(f"✅ Previsão salva como '{output_path}'")
+
+import matplotlib.pyplot as plt
+import os
+
+def graph_better_round(better_round):
+    # Ordena os dados e reseta o índice para garantir alinhamento com as barras
+    better_round = better_round.sort_values('Saldo de Gols', ascending=True).reset_index(drop=True)
+
+    plt.figure(figsize=(10, 8))
+    bars = plt.barh(better_round['Time'], better_round['Saldo de Gols'], color='skyblue')
+
+    for i, bar in enumerate(bars):
+        gols = better_round.loc[i, 'Gols Feitos']
+        width = bar.get_width()
+        plt.text(
+            width + 0.2,
+            bar.get_y() + bar.get_height() / 2,
+            f'{gols} gols',
+            va='center',
+            fontsize=9,
+            color='black'
+        )
+
+    plt.xlabel('Saldo de Gols na Rodada Mais Produtiva')
+    plt.ylabel('Times')
+    plt.title('Rodada Mais Produtiva de Cada Time no Brasileirão 2024')
+    plt.grid(axis='x', linestyle='--', alpha=0.7)
+    plt.tight_layout()
+
+    path_output = os.path.join(OUTPUT_IMG_DIR, "Melhor rodada.png")
+    plt.savefig(path_output, dpi=300)
+    plt.close() 
+
+    print(f"✅ Gráfico salvo em: {path_output}")
+
