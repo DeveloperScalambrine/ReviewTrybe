@@ -124,9 +124,6 @@ def plot_previsao(limiar_campeao=75, jogos=14, total_rodadas=38, output_path="/h
 
     print(f"✅ Previsão salva como '{output_path}'")
 
-import matplotlib.pyplot as plt
-import os
-
 def graph_better_round(better_round):
     # Ordena os dados e reseta o índice para garantir alinhamento com as barras
     better_round = better_round.sort_values('Saldo de Gols', ascending=True).reset_index(drop=True)
@@ -136,11 +133,12 @@ def graph_better_round(better_round):
 
     for i, bar in enumerate(bars):
         gols = better_round.loc[i, 'Gols Feitos']
+        rodada = better_round.loc[i, 'Rodada']
         width = bar.get_width()
         plt.text(
             width + 0.2,
             bar.get_y() + bar.get_height() / 2,
-            f'{gols} gols',
+            f'{gols} gols (Rodada {rodada} )',
             va='center',
             fontsize=9,
             color='black'
