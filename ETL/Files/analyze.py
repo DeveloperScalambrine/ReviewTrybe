@@ -45,6 +45,7 @@ def analyze_Per_Round(round):
 
 def analyze_Per_Team():
     df = read(paths[0], "excel")
+    df_rod = analyze_Per_Round(6)
     
     df['JOGO'] = df['JOGO'].astype(str)
     df[['TimeMandante', 'UF_M', 'Gols_M', 'Gols_V', 'TimeVisitante', 'UF_V']] = df['JOGO'].str.extract(
@@ -62,11 +63,10 @@ def analyze_Per_Team():
     df['GolVisitante'] = df['TimeVisitante'].str.strip() + ' ' + df['UF_V'] + ' - ' + df['Gols_V']
 
     df['ROD_NUM'] = df['ROD'].str.extract(r'(\d+)').astype(int)
-
 # Filtra a rodada de forma dinamica, passando a rodada no parametro da função analyze_Per_Round
-    filter_per_round = df[df['ROD_NUM'] <= analyze_Per_Round(30)
+    filter_per_round = df[df['ROD_NUM'] <= analyze_Per_Round(25)
+                          
 ]
-
     principal = filter_per_round[filter_per_round['GolMandante'].str.contains(r'^São Paulo SP', regex=True)]
 
     visitor = filter_per_round[filter_per_round['GolVisitante'].str.contains(r'^São Paulo SP', regex=True)]
@@ -76,10 +76,10 @@ def analyze_Per_Team():
 
     total_gols_sp = gols_principal + gols_visitor
     print(f"Total de gols realizado pela equipe do são paulo, {total_gols_sp}")
-    return df
+    return df, df_rod
 
 def analyze_Gol_Per_Round(graph_func=None):
-    df = analyze_Per_Team()
+    df, df_rod = analyze_Per_Team()
 
     # Filtra São Paulo como mandante e visitante
     sp_home = df[df['GolMandante'].str.strip().str.contains(r'^São Paulo SP', case=False, regex=True)].copy()
@@ -97,6 +97,8 @@ def analyze_Gol_Per_Round(graph_func=None):
     sp_total = pd.concat([sp_home, sp_visitor])
 
     sp_total['ROD_NUM'] = sp_total['ROD_NUM'].astype(int)
+    sp_total = sp_total[sp_total['ROD_NUM'] <= df_rod]
+
 
     gol_per_round = sp_total.groupby('ROD_NUM')['GOLS'].sum()
 
@@ -104,7 +106,7 @@ def analyze_Gol_Per_Round(graph_func=None):
     round_min = gol_per_round.idxmin()
         
     if graph_func:
-        graph_func(gol_per_round, round_max, round_min)
+        graph_func(gol_per_round, round_max, round_min, df_rod)
         
     return gol_per_round, round_max, round_min
 

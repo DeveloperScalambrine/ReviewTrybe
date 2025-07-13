@@ -14,9 +14,7 @@ INPUT_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "Created_File"))
 # Caminho para salvar imagens
 OUTPUT_IMG_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "img"))
 
-
-def graph_team_round_gol(gol_per_round, round_max, round_min):
-    
+def graph_team_round_gol(gol_per_round, round_max, round_min, df_rod):
     # --- 📊 Gráfico ---
     plt.figure(figsize=(10, 6))
     bars = plt.bar(gol_per_round.index, gol_per_round.values, color='skyblue')
