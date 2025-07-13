@@ -13,12 +13,15 @@ O principal objetivo é aplicar técnicas de engenharia e análise de dados para
      - [Evolução das Equipes até a decima quarta rodada](https://docs.google.com/presentation/d/1_pESzz4cRUk76GZ4W93ttyQG-awJwW9qau35xQX5Kgk/edit?slide=id.g36d213a271f_0_5#slide=id.g36d213a271f_0_5)
      - [Insights](https://docs.google.com/presentation/d/1_pESzz4cRUk76GZ4W93ttyQG-awJwW9qau35xQX5Kgk/edit?slide=id.g36d213a271f_0_14#slide=id.g36d213a271f_0_14)
 - Como está o desempenho dentro e fora de casa?
-- - **Links da apresentação respondendo a questão acima**
+- - **Links da apresentação respondendo a questão acima:**
   - [Desempenho geral dos Times no Campeonato em casa e fora](https://docs.google.com/presentation/d/1_pESzz4cRUk76GZ4W93ttyQG-awJwW9qau35xQX5Kgk/edit?slide=id.g362e55f8928_0_0#slide=id.g362e55f8928_0_0)
   - [Desempenho de gols dos Times](https://docs.google.com/presentation/d/1_pESzz4cRUk76GZ4W93ttyQG-awJwW9qau35xQX5Kgk/edit?slide=id.g362e55f8928_0_15#slide=id.g362e55f8928_0_15)
   - [Desempenho em casa e gols sofridos](https://docs.google.com/presentation/d/1_pESzz4cRUk76GZ4W93ttyQG-awJwW9qau35xQX5Kgk/edit?slide=id.g362e55f8928_0_31#slide=id.g362e55f8928_0_31)
 - Quais rodadas foram mais produtivas para determinado time?
+  - - **Link da apresentação respondendo a questão acima:**
+    - [Rodada mais produtiva por equipe](https://docs.google.com/presentation/d/1_pESzz4cRUk76GZ4W93ttyQG-awJwW9qau35xQX5Kgk/edit?slide=id.g36e9d054300_0_0#slide=id.g36e9d054300_0_0)
 - Como construir uma classificação automática baseada nos resultados?
+  
 
 ---
 
