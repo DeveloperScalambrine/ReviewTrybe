@@ -17,6 +17,7 @@ paths = [
 
 # analyze.py → Funções principais de análise
 from analyze import (
+    analyze_Per_Team,
     pred_Winner,
     analyze_Gol_Per_Round,
     plot_previsao_cores_times,
@@ -24,8 +25,8 @@ from analyze import (
     reading_tabs,
     analyze_Per_Round,
     perfor_inside_outside,
-    round_favority
-    # records_general
+    round_favority,
+    read
     # extract_pdf_tables_to_excel  # Ative se for usar conversão de PDF
 )
 
@@ -73,17 +74,18 @@ def main():
     # )
 
     # # 🟡 Ative conforme necessidade:
-    # analyze_Gol_Per_Round(graph_team_round_gol)
+    # analyze_Per_Team()
+    analyze_Gol_Per_Round(graph_team_round_gol)
     # better_team(graph_better_team)
     # reading_tabs(graph_five_top)
     # plot_previsao()
     # plot_evolucao_top5(paths[1])
-    # # analyze_Per_Round(7)
+    # analyze_Per_Round(7)
     # perfor_inside_outside(analysis_performance_home)
     # perfor_inside_outside(analysis_win_out)
     # perfor_inside_outside(point_home_out)
     # perfor_inside_outside(plot_with_regression)
-    round_favority(graph_better_round)
+    # round_favority(graph_better_round)
 
     print("✅ Análise finalizada com sucesso!")
 

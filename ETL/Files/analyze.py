@@ -17,8 +17,7 @@ paths = [
     os.path.join(INPUT_DIR, 'Brasileiro_2024.xlsx'),
     os.path.join(INPUT_DIR, 'Tables.xlsx'),
     os.path.join(INPUT_DIR, 'Records_Points.xlsx'),
-    os.path.join(INPUT_DIR, 'Points.xlsx'),
-    
+    os.path.join(INPUT_DIR, 'Points.xlsx'),    
 ]
 
 def read(table, type_file):
@@ -41,6 +40,9 @@ def read(table, type_file):
     
     return df
 
+def analyze_Per_Round(round):
+    return round
+
 def analyze_Per_Team():
     df = read(paths[0], "excel")
     
@@ -61,53 +63,55 @@ def analyze_Per_Team():
 
     df['ROD_NUM'] = df['ROD'].str.extract(r'(\d+)').astype(int)
 
-# Filtra do início até a segunda rodada
-    df_filter_2rod = df[df['ROD_NUM'] <= 10]
+# Filtra a rodada de forma dinamica, passando a rodada no parametro da função analyze_Per_Round
+    filter_per_round = df[df['ROD_NUM'] <= analyze_Per_Round(30)
+]
 
-    principal = df_filter_2rod[df_filter_2rod['GolMandante'].str.contains(r'^São Paulo SP', regex=True)]
+    principal = filter_per_round[filter_per_round['GolMandante'].str.contains(r'^São Paulo SP', regex=True)]
 
-    visitor = df_filter_2rod[df_filter_2rod['GolVisitante'].str.contains(r'^São Paulo SP', regex=True)]
+    visitor = filter_per_round[filter_per_round['GolVisitante'].str.contains(r'^São Paulo SP', regex=True)]
 
     gols_principal = principal['GolMandante'].str.extract(r' - (\d+)$').astype(int).sum().values[0]
     gols_visitor = visitor['GolVisitante'].str.extract(r' - (\d+)$').astype(int).sum().values[0]
 
     total_gols_sp = gols_principal + gols_visitor
-
+    print(f"Total de gols realizado pela equipe do são paulo, {total_gols_sp}")
     return df
 
 def analyze_Gol_Per_Round(graph_func=None):
     df = analyze_Per_Team()
 
     # Filtra São Paulo como mandante e visitante
-    sp_mandante = df[df['GolMandante'].str.strip().str.contains(r'^São Paulo SP', case=False, regex=True)].copy()
-    sp_visitante = df[df['GolVisitante'].str.strip().str.contains(r'^São Paulo SP', case=False, regex=True)].copy()
+    sp_home = df[df['GolMandante'].str.strip().str.contains(r'^São Paulo SP', case=False, regex=True)].copy()
+    sp_visitor = df[df['GolVisitante'].str.strip().str.contains(r'^São Paulo SP', case=False, regex=True)].copy()
 
-    sp_mandante['GOLS'] = sp_mandante['GolMandante'].str.extract(r'(\d+)$').astype(int)
-    sp_mandante['TIME'] = 'São Paulo SP'
-    sp_mandante['TIPO'] = 'Mandante'
+    sp_home['GOLS'] = sp_home['GolMandante'].str.extract(r'(\d+)$').astype(int)
+    sp_home['TIME'] = 'São Paulo SP'
+    sp_home['TIPO'] = 'Mandante'
 
-    sp_visitante['GOLS'] = sp_visitante['GolVisitante'].str.extract(r'(\d+)$').astype(int)
-    sp_visitante['TIME'] = 'São Paulo SP'
-    sp_visitante['TIPO'] = 'Visitante'
+    sp_visitor['GOLS'] = sp_visitor['GolVisitante'].str.extract(r'(\d+)$').astype(int)
+    sp_visitor['TIME'] = 'São Paulo SP'
+    sp_visitor['TIPO'] = 'Visitante'
 
     # Junta os dois dataframes
-    sp_total = pd.concat([sp_mandante, sp_visitante])
+    sp_total = pd.concat([sp_home, sp_visitor])
 
     sp_total['ROD_NUM'] = sp_total['ROD_NUM'].astype(int)
 
-    gols_por_rodada = sp_total.groupby('ROD_NUM')['GOLS'].sum()
+    gol_per_round = sp_total.groupby('ROD_NUM')['GOLS'].sum()
 
-    rodada_max = gols_por_rodada.idxmax()
-    rodada_min = gols_por_rodada.idxmin()
-    
+    round_max = gol_per_round.idxmax()
+    round_min = gol_per_round.idxmin()
+        
     if graph_func:
-       graph_func(gols_por_rodada, rodada_max, rodada_min)
-    
-    return gols_por_rodada, rodada_max, rodada_min
+        graph_func(gol_per_round, round_max, round_min)
+        
+    return gol_per_round, round_max, round_min
 
-def analyze_Per_Round(round):
-    df = analyze_Per_Team()
-    df_filter_round = df[df['ROD_NUM'] == round]
+# def analyze_Per_Round(round):
+#     df = analyze_Per_Team()
+#     df_filter_round = df[df['ROD_NUM'] == round]
+#     return round
 
 # Para acessar uma aba específica por nome passa o nome da aba no segundo parametro
 def reading_tabs(graph_func=None):

@@ -15,23 +15,23 @@ INPUT_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "Created_File"))
 OUTPUT_IMG_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "img"))
 
 
-def graph_team_round_gol(gols_por_rodada, rodada_max, rodada_min):
+def graph_team_round_gol(gol_per_round, round_max, round_min):
     
     # --- 📊 Gráfico ---
     plt.figure(figsize=(10, 6))
-    bars = plt.bar(gols_por_rodada.index, gols_por_rodada.values, color='skyblue')
+    bars = plt.bar(gol_per_round.index, gol_per_round.values, color='skyblue')
 
-    bars[gols_por_rodada.index.get_loc(rodada_max)].set_color('green')
-    bars[gols_por_rodada.index.get_loc(rodada_min)].set_color('red')
+    bars[gol_per_round.index.get_loc(round_max)].set_color('green')
+    bars[gol_per_round.index.get_loc(round_min)].set_color('red')
 
     # Rótulos
     plt.title('Gols do São Paulo SP por Rodada')
     plt.xlabel('Rodada')
     plt.ylabel('Gols Marcados')
-    plt.xticks(gols_por_rodada.index)
+    plt.xticks(gol_per_round.index)
 
-    plt.text(rodada_max, gols_por_rodada[rodada_max] + 0.2, f'Máx: {gols_por_rodada[rodada_max]}', ha='center', color='green')
-    plt.text(rodada_min, gols_por_rodada[rodada_min] + 0.2, f'Mín: {gols_por_rodada[rodada_min]}', ha='center', color='red')
+    plt.text(round_max, gol_per_round[round_max] + 0.2, f'Máx: {gol_per_round[round_max]}', ha='center', color='green')
+    plt.text(round_min, gol_per_round[round_min] + 0.2, f'Mín: {gol_per_round[round_min]}', ha='center', color='red')
 
     plt.tight_layout()
     plt.savefig(os.path.join(OUTPUT_IMG_DIR, 'Gols Sao Paulo.png'), dpi=300)
